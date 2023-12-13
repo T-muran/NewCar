@@ -4,9 +4,10 @@ import { getToken } from "./auth";
 
 // 创建axios实例
 const service = axios.create({
-  baseURL: "http://127.0.0.1:8080", // api的base_url
+  baseURL: "http://159.75.147.119:8080", // api的base_url
   timeout: 5000 // 请求超时时间
 });
+//159.75.147.119
 
 // request拦截器
 service.interceptors.request.use(

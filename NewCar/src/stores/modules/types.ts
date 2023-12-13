@@ -3,7 +3,7 @@
 export type userType = {
   id?: string;
   userName?: string;
-  phone?: string;
+  phoneNum?: string;
   idNumber?: string;
   status?: string;
   carTotal?: number;

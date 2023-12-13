@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref,isRef } from 'vue'
 import { getMapPoint,getMemberPoint,getPointInfo } from '../../api/map'
 
 export const mapDatas = defineStore('map',()=>{

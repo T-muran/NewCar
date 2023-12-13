@@ -7,7 +7,7 @@ import { reactive, getCurrentInstance, onMounted, onUnmounted, ref } from "vue";
 import AMapLoader from "@amap/amap-jsapi-loader";
 import { mapDatas } from "../stores/modules/map";
 import car from "../assets/car.png";
-import { createWindow } from "../utils/creareInfoWindow";
+import { createWindow,unmount } from "../utils/creareInfoWindow";
 
 const lng = ref(104.04311);
 const lat = ref(30.64242);
@@ -111,7 +111,6 @@ onMounted(() => {
                             if (status === "complete" && result.info === "OK") {
                                 // result为对应的地理位置详细信息
                                 const address = result.regeocode.formattedAddress;
-                                console.log(address);
                                 const { div, app } = createWindow(closeApp)
                                 infoWindow = new AMap.InfoWindow({
                                     anchor: 'middle-left',
@@ -121,6 +120,7 @@ onMounted(() => {
                                 infoWindow.open(map, lnglat);
                                 function closeApp() {
                                     infoWindow.close();
+                                    unmount()
                                 }
                             } else {
                                 console.log('获取地理位置信息失败')
@@ -131,7 +131,10 @@ onMounted(() => {
             },
         });
         map.on('click', () => {
-            if(infoWindow) infoWindow.close();
+            if(infoWindow) {
+                infoWindow.close();
+                unmount()
+            }
         })
 
         //添加聚合点点击事件
