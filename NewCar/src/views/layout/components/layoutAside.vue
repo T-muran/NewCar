@@ -44,10 +44,14 @@
                 </template>
                 <el-menu-item-group>
                     <el-menu-item index="userList">用户列表</el-menu-item>
-                    <el-menu-item index="adminList">管理员列表</el-menu-item>
+                    <el-menu-item v-if="userData.userName==='admin'" index="adminList">管理员列表</el-menu-item>
                 </el-menu-item-group>
             </el-sub-menu>
         </el-menu>
+
+        <div class="head">
+            <img :src="userData.avatar" alt="">
+        </div>
     </div>
 </template>
 
@@ -63,9 +67,15 @@ import {
     User,
 
 } from '@element-plus/icons-vue'
+import {useUserStore} from '../../../stores/modules/user'
 
+const userStore = useUserStore()
+
+const userData = userStore.getUserInfo()
 
 const animator = anim();
+
+console.log(userData);
 
 //鼠标移动到侧边栏时，侧边栏展开,logo显示
 const mouseover = () => {

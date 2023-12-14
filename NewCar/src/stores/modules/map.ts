@@ -20,6 +20,8 @@ export const mapDatas = defineStore('map',()=>{
     const getPlatoonData = async(data:any) => {
         const res = await getPointInfo(data)
         if(res){
+            console.log(res.data.data.avatar);
+            res.data.data.avatar = 'http://159.75.147.119:8080' + res.data.data.avatar;
             mapData.value = res.data
         }
         console.log(mapData.value);

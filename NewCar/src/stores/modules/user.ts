@@ -44,12 +44,23 @@ export const useUserStore = defineStore('user', () => {
         router.push('/login')
     }
 
+    //从localStorage获取用户信息
+    const getUserInfo = () => {
+        const user = localStorage.getItem('user')
+        if (user) {
+            return JSON.parse(user)
+        }
+        return {}
+    }
+    
+
     return {
         userSet,
         error,
         loginAdmin,
         logout,
-        userInfo
+        userInfo,
+        getUserInfo
     }
 })
 

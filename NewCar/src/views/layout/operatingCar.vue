@@ -167,6 +167,7 @@ const clickEvent = () => {
                 width: 150px;
                 height: 150px;
                 border-radius: 5px 5px 0 0;
+                object-fit: cover;
             }
 
             .text{

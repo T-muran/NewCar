@@ -6,12 +6,17 @@ export const useCarStore = defineStore('car', () => {
     const carInfo = ref([])
 
     //获取所有车辆信息
-    const getAllCar = async (data:any) => {
+    const getAllCar = async (data: any) => {
         try {
             const res = await getCarInfo(data)
             const result = res.data
             if (result.code) {
-                carInfo.value = result.data
+                console.log(result.data.records);
+
+                result.data.records.forEach((item: any) => {
+                    item.avatar = 'http://159.75.147.119:8080' + item.avatar;
+                    carInfo.value = result.data
+                })
             }
         } catch (error) {
             console.log('获取车辆信息失败:', error)

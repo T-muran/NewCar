@@ -33,6 +33,8 @@ onMounted(async () => {
     try{
         await getVal();
         value1.value = carData.carData.values.data;
+
+        console.log(value1.value);
     }catch(err){
         console.log(err);
     }

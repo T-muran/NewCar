@@ -6,7 +6,7 @@
             </div>
         </div>
         <div class="container">
-            <el-table :data="tableData" :row-style="{height: '60px'}" :cell-style="{ textAlign: 'center' }"
+            <el-table :data="tableData" :row-style="{ height: '60px' }" :cell-style="{ textAlign: 'center' }"
                 :header-cell-style="{ textAlign: 'center' }" class="table">
                 <el-table-column fixed prop="name" label="真实姓名" width="150" />
                 <el-table-column prop="sex" label="性别" min-width="180" />
@@ -39,7 +39,7 @@ import SearchBar from './components/searchBar.vue';
 import { ref, watch, onMounted, reactive } from 'vue'
 import { anim } from '../../stores/modules/animator';
 import { usersInfo } from '../../stores/modules/user';
-
+import { changeState } from '../../api/user'
 
 const usersdata = usersInfo()
 const value1 = ref('')
@@ -67,7 +67,12 @@ watch(() => animator.animations.isCollapse,
 )
 
 const handleClick = (row) => {
-    console.log(row)
+    if(row.status === 1) {
+        row.status = 0
+    } else {
+        row.status = 1
+    }
+    changeState({ id: row.id, status: row.status ,who: 0})
 }
 
 const tableData = reactive([])
@@ -130,7 +135,7 @@ const clickEvent = () => {
         searchData.value.phoneNum = searchName.value.inputValue
         searchData.value.name = ''
     }
-    
+
     console.log(searchData.value)
     search()
 }
@@ -214,4 +219,5 @@ const clickEvent = () => {
     width: 83%;
 
     transition: all 0.5s;
-}</style>
+}
+</style>

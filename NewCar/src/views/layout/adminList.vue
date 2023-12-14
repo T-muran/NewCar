@@ -24,9 +24,13 @@
         </div>
         <div class="line"></div>
         <div class="foot">
+            <span>
+                <dialogButton />
+            </span>
             <el-pagination background layout="prev, pager, next" :total=pageInfo.total :page-size=pageInfo.size
                 @click="clickEvent" v-model:current-page="pageInfo.curr" class="m-2" />
         </div>
+        
     </div>
 </template>
 
@@ -35,6 +39,8 @@ import SearchBar from './components/searchBar.vue';
 import { ref, watch, onMounted, reactive } from 'vue'
 import { anim } from '../../stores/modules/animator';
 import { usersInfo } from '../../stores/modules/user';
+import { changeState } from '../../api/user'
+import dialogButton from './components/dialogButton.vue'
 
 const usersdata = usersInfo()
 const value1 = ref('')
@@ -62,8 +68,14 @@ watch(() => animator.animations.isCollapse,
 )
 
 
-const handleClick = () => {
-    console.log('click')
+const handleClick = (row) => {
+    if(row.status === 1) {
+        row.status = 0
+    } else {
+        row.status = 1
+    }
+
+    changeState({ id: row.id, status: row.status ,who: 1})
 }
 
 const tableData = reactive([])
@@ -122,6 +134,7 @@ const clickEvent = () => {
     console.log(searchData.value)
     search()
 }
+
 
 </script>
 <style scoped>
@@ -189,11 +202,24 @@ const clickEvent = () => {
         width: 100%;
         height: 10%;
         display: flex;
-        justify-content: end;
+        justify-content: space-between;
         align-items: center;
         margin-bottom: 20px;
         position: relative;
-        right: 40px;
+
+        span{
+            margin-left: 50px;
+            .el-button {
+                width: 100px;
+                height: 30px;
+                border-radius: 5px;
+                font-size: 15px;
+            }
+
+        }
+        .el-pagination {
+            margin-right: 50px;
+        }
     }
 }
 

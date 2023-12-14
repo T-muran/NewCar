@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { ref, reactive } from 'vue'
 import { carType } from './types'
-import { getPartialPlatoon,getAllPlatoon } from '../../api/home'
+import { getPartialPlatoon, getAllPlatoon } from '../../api/home'
 
 export const carDatas = defineStore('carDatas', () => {
     const carData = reactive([
@@ -10,15 +10,19 @@ export const carDatas = defineStore('carDatas', () => {
     //获取部分车队信息
     const getPlatoonData1 = async () => {
         const res = await getPartialPlatoon()
-        if(res){
+        if (res) {
+            res.data.data.forEach((item) => {
+                item.avatar = 'http://159.75.147.119:8080' + item.avatar;
+            });
             carData.values = res.data
         }
+
     }
 
     //获取全部车队信息
-    const getPlatoonData2 = async (data?:any) => {
+    const getPlatoonData2 = async (data?: any) => {
         const res = await getAllPlatoon(data)
-        if(res){
+        if (res) {
             carData.values = res.data
         }
     }

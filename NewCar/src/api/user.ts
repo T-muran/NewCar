@@ -2,7 +2,7 @@ import request from "../utils/request";
 
 export const changeState = (data:any) => {
     return request({
-        url: "/changeState",
+        url: "/changeStatus",
         method: "post",
         data
     });
