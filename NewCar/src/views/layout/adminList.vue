@@ -1,22 +1,18 @@
 <template>
-    <div class="userList">
+    <div class="adminList">
         <div class="top">
-            <SearchBar info="搜索用户名字/手机号" @search="clickEvent" ref="searchName" />
+            <SearchBar @search="clickEvent" info="搜索管理员名字" ref="searchName" />
             <div class="selector">
             </div>
         </div>
         <div class="container">
-            <el-table :data="tableData" :row-style="{height: '60px'}" :cell-style="{ textAlign: 'center' }"
+            <el-table :data="tableData" :row-style="{ height: '60px' }" :cell-style="{ textAlign: 'center' }"
                 :header-cell-style="{ textAlign: 'center' }" class="table">
-                <el-table-column fixed prop="name" label="真实姓名" width="150" />
-                <el-table-column prop="sex" label="性别" min-width="180" />
-                <el-table-column prop="birthDate" label="生日" min-width="180" />
-                <el-table-column prop="userName" label="用户名" min-width="180" />
-                <el-table-column prop="phoneNum" label="手机号" min-width="180" />
-                <el-table-column prop="email" label="邮箱" min-width="180" />
+                <el-table-column fixed prop="userName" label="用户名" width="150" />
+                <el-table-column prop="id" label="管理员id" min-width="180" />
                 <el-table-column prop="idNumber" label="身份证号" min-width="180" />
-                <el-table-column prop="address" label="常用地址" min-width="320" />
-                <el-table-column prop="status" fixed="right" label="操作" min-width="120">
+                <el-table-column prop="phoneNum" label="手机号" min-width="180" />
+                <el-table-column fixed="right" label="操作" min-width="120">
                     <template #default="{ row }">
                         <el-button link type="primary" size="small" @click="handleClick(row)"
                             v-if="row.status === 1">禁用</el-button>
@@ -40,34 +36,34 @@ import { ref, watch, onMounted, reactive } from 'vue'
 import { anim } from '../../stores/modules/animator';
 import { usersInfo } from '../../stores/modules/user';
 
-
 const usersdata = usersInfo()
 const value1 = ref('')
 const animator = anim()
 
 onMounted(() => {
-    const userList = document.querySelector('.userList')
+    const adminList = document.querySelector('.adminList')
     if (animator.animations.isCollapse) {
-        userList.classList.remove('hide')
+        adminList.classList.remove('hide')
     } else {
-        userList.classList.add('hide')
+        adminList.classList.add('hide')
     }
 })
 
 watch(() => animator.animations.isCollapse,
     //如果为true，则为platoonInfo移除hide类，否则添加hide类
     () => {
-        const userList = document.querySelector('.userList')
+        const adminList = document.querySelector('.adminList')
         if (animator.animations.isCollapse) {
-            userList.classList.remove('hide')
+            adminList.classList.remove('hide')
         } else {
-            userList.classList.add('hide')
+            adminList.classList.add('hide')
         }
     }
 )
 
-const handleClick = (row) => {
-    console.log(row)
+
+const handleClick = () => {
+    console.log('click')
 }
 
 const tableData = reactive([])
@@ -83,7 +79,7 @@ onMounted(async () => {
 })
 
 const getVal = async () => {
-    await usersdata.getUsersInfo({ page: 1, pageSize: 10 });
+    await usersdata.getAdminInfo({ page: 1, pageSize: 10 });
 
     pageInfo.curr = usersdata.users.data.current
     pageInfo.total = usersdata.users.data.total
@@ -94,7 +90,7 @@ const getVal = async () => {
 };
 
 const search = async () => {
-    await usersdata.getUsersInfo(searchData.value)
+    await usersdata.getAdminInfo(searchData.value)
     const res = usersdata.users.data.records
     tableData.splice(0, tableData.length)
     tableData.push(...res)
@@ -110,8 +106,7 @@ const searchName = ref('')
 type SearchData = {
     page: number
     pageSize: number
-    name?: string
-    phoneNum?: string
+    userName?: string
 }
 
 const searchData = ref<SearchData>({
@@ -122,23 +117,15 @@ const searchData = ref<SearchData>({
 const clickEvent = () => {
     searchData.value.page = pageInfo.curr
     searchData.value.pageSize = pageInfo.size
-    //如果searchName.value.InputValue为数字，则为phoneNum赋值，否则为name赋值
-    if (isNaN(Number(searchName.value.inputValue))) {
-        searchData.value.name = searchName.value.inputValue
-        searchData.value.phoneNum = ''
-    } else {
-        searchData.value.phoneNum = searchName.value.inputValue
-        searchData.value.name = ''
-    }
-    
+    searchData.value.userName = searchName.value.inputValue
+
     console.log(searchData.value)
     search()
 }
 
-
 </script>
 <style scoped>
-.userList {
+.adminList {
     width: 91%;
     height: 100%;
     display: flex;
@@ -214,4 +201,5 @@ const clickEvent = () => {
     width: 83%;
 
     transition: all 0.5s;
-}</style>
+}
+</style>

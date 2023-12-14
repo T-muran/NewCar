@@ -1,13 +1,14 @@
 <template>
     <el-card class="box-card">
         <div class="card-header">
-            <span>车队编号#{{ mapDataInfo.mapData.data.carPlate }}</span>
+            <span>车队编号#{{ mapDataInfo.mapData.data.platoonId}}</span>
             <el-icon @click="close">
                 <Close />
             </el-icon>
         </div>
         <div class="status">
-            1
+            <span class="running" v-if="mapDataInfo.mapData.data.status==1">运行中</span>
+            <span class="end" v-if="mapDataInfo.mapData.data.status==0">已结束</span>
         </div>
         <div class="time">
             <el-card class="time-card card1">
@@ -38,11 +39,17 @@
             <el-card class="info-card">
                 <div class="head">
                     <span>领队信息</span>
-                    <div class="headInfo">
-                        <img :src=avatar alt="">
-                        <div class="text">
-                            <span>{{ mapDataInfo.mapData.data.userName }}</span>
-                            <span>{{ mapDataInfo.mapData.data.sex }}</span>
+                    <div class="leader-text">
+                        <div class="headInfo">
+                            <img :src=avatar alt="">
+                            <div class="text">
+                                <span>{{ mapDataInfo.mapData.data.userName }}</span>
+                                <span>{{ mapDataInfo.mapData.data.sex }}</span>
+                            </div>
+                        </div>
+                        <div class="leaderCar">
+                            <span>车牌号</span>
+                            <span>{{ mapDataInfo.mapData.data.carPlate }}</span>
                         </div>
                     </div>
                 </div>
@@ -147,7 +154,32 @@ watch(toRef(mapDataInfo, 'mapData'), (newVal, oldVal) => {
     scale: 1.25;
 }
 
-.status {}
+.status {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    margin: 10px 0;
+
+    .running {
+        width: 70px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: #f0f7ff;
+        border-radius: 15px;
+        color: #2160f9;
+    }
+
+    .end {
+        width: 70px;
+        height: 30px;
+        line-height: 30px;
+        text-align: center;
+        background-color: #f0f7ff;
+        border-radius: 15px;
+        color: #888;
+    }
+}
 
 .time {
     width: 100%;
@@ -243,45 +275,68 @@ watch(toRef(mapDataInfo, 'mapData'), (newVal, oldVal) => {
             align-items: start;
             margin-bottom: 20px;
 
-            span {
-                font-size: 14px;
-                font-weight: 600;
-                color: #333;
-            }
-
-            .headInfo {
+            .leader-text{
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-
-                img {
-                    width: 40px;
-                    height: 40px;
-                    border-radius: 50%;
-                    margin-right: 20px;
-                    margin-top: 10px;
+                width: 100%;
+                
+                span {
+                    font-size: 14px;
+                    font-weight: 600;
+                    color: #333;
+                }
+    
+                .headInfo {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+    
+                    img {
+                        width: 40px;
+                        height: 40px;
+                        border-radius: 50%;
+                        margin-right: 20px;
+                        margin-top: 10px;
+                    }
+    
+                    .text {
+                        display: flex;
+                        flex-direction: column;
+                        justify-content: space-between;
+                        align-items: start;
+    
+                        span:nth-child(1) {
+                            font-size: 18px;
+                            font-weight: 700;
+                            color: #333;
+                            margin-bottom: 5px;
+                        }
+    
+                        span:nth-child(2) {
+                            font-size: 14px;
+                            font-weight: 500;
+                            color: #999;
+                        }
+                    }
                 }
 
-                .text {
+                .leaderCar {
                     display: flex;
                     flex-direction: column;
-                    justify-content: space-between;
+                    justify-content: space-around;
                     align-items: start;
 
-                    span:nth-child(1) {
-                        font-size: 18px;
-                        font-weight: 700;
-                        color: #333;
-                        margin-bottom: 5px;
-                    }
-
-                    span:nth-child(2) {
+                    span {
                         font-size: 14px;
-                        font-weight: 500;
-                        color: #999;
+                        font-weight: 600;
+                        color: #333;
+                        margin-bottom: 10px;
+                        margin-right: 20px;
                     }
                 }
             }
+
         }
 
         .line {

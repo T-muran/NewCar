@@ -4,7 +4,7 @@ import { userType } from './types'
 import { UserResult, login1 } from '../../api/login'
 import { setToken, removeToken,setUser } from '../../utils/auth'
 import router from '../../router/index'
-import { getAllUser } from '../../api/user'
+import { getAllUser,getAllEmployee } from '../../api/user'
 
 //个人信息
 export const useUserStore = defineStore('user', () => {
@@ -69,8 +69,21 @@ export const usersInfo = defineStore('usersInfo', () => {
         }
     }
 
+    //获取管理员信息
+    const getAdminInfo = async (data?: any) => {
+        try {
+            const res = await getAllEmployee(data)
+            if (res) {
+                users.value = res.data
+            }
+        } catch (error) {
+            console.error('获取管理员信息失败:', error)
+        }
+    }
+
     return {
         users,
-        getUsersInfo
+        getUsersInfo,
+        getAdminInfo,
     }
 })

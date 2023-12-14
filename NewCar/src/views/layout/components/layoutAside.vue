@@ -44,7 +44,7 @@
                 </template>
                 <el-menu-item-group>
                     <el-menu-item index="userList">用户列表</el-menu-item>
-                    <el-menu-item index="blackList">管理员列表</el-menu-item>
+                    <el-menu-item index="adminList">管理员列表</el-menu-item>
                 </el-menu-item-group>
             </el-sub-menu>
         </el-menu>

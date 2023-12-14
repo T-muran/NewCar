@@ -1,39 +1,68 @@
 <template>
     <div class="userList">
         <div class="top">
-            <SearchBar info="搜索用户名字"  />
+            <SearchBar info="搜索用户名字" />
             <div class="selector">
-                <el-select v-model="value1" class="m-2" placeholder="选择用户状态" size="large">
-                    <el-option v-for="item in options1" :key="item.value" :label="item.label" :value="item.value" />
-                </el-select>
             </div>
         </div>
+        <div class="line"></div>
         <div class="container">
-
+            <el-card class="box-card" v-for="item in carInfo" :key="item">
+                <img :src=item.avatar alt="">
+                <div class="text">
+                    <span>{{ item.carPlate }}</span>
+                    <span v-if=item.isRenewable>新能源</span>
+                </div>
+            </el-card>
         </div>
         <div class="line"></div>
         <div class="foot">
-            <el-pagination background layout="prev, pager, next" :total="1000" :page-size="10" class="m-2" />
+            <el-pagination background layout="prev, pager, next" @click="clickEvent" v-model:current-page="pageInfo.curr" :total=pageInfo.total :page-size=pageInfo.size
+                class="m-2" />
         </div>
     </div>
 </template>
 
 <script setup lang='ts'>
 import SearchBar from './components/searchBar.vue';
-import { ref, watch,onMounted } from 'vue'
+import { ref, watch, onMounted, reactive } from 'vue'
 import { anim } from '../../stores/modules/animator';
-
+import { useCarStore } from '../../stores/modules/car'
 
 const value1 = ref('')
 const animator = anim()
+const carStore = useCarStore()
 
-onMounted(() => {
+const pageInfo = reactive({
+    curr: 1,
+    total: 1,
+    size: 8
+})
+
+const carInfo = reactive([
+
+])
+
+onMounted(async () => {
     const userList = document.querySelector('.userList')
     if (animator.animations.isCollapse) {
         userList.classList.remove('hide')
     } else {
         userList.classList.add('hide')
     }
+    //获取车辆信息
+    await carStore.getAllCar({ page: pageInfo.curr, pageSize: pageInfo.size })
+    const res = carStore.carInfo.records
+    //res赋值给carInfo
+    carInfo.push(
+        ...res
+    )
+    console.log(carInfo);
+
+    //获取页面信息
+    pageInfo.curr = carStore.carInfo.current
+    pageInfo.total = carStore.carInfo.total
+    pageInfo.size = carStore.carInfo.size
 })
 
 watch(() => animator.animations.isCollapse,
@@ -48,21 +77,33 @@ watch(() => animator.animations.isCollapse,
     }
 )
 
-const options1 = [
-    {
-        value: 0,
-        label: '管理员',
-    },
-    {
-        value: 1,
-        label: '空闲',
-    },
-    {
-        value: 2,
-        label: '忙碌',
-    },
-]
+const search = async() => {
+    await carStore.getAllCar(searchData.value)
 
+    const res = carStore.carInfo.records
+    //res赋值给carInfo
+    carInfo.splice(0, carInfo.length)
+    carInfo.push(
+        ...res
+    )
+}
+
+type SearchData={
+    page:number
+    pageSize:number
+}
+
+const searchData = ref<SearchData>({
+    page:1,
+    pageSize:8,
+})
+
+const clickEvent = () => {
+    searchData.value.page = pageInfo.curr
+    searchData.value.pageSize = pageInfo.size
+    //调用getVal函数，重新获取数据
+    search()
+}
 
 </script>
 <style scoped>
@@ -107,9 +148,58 @@ const options1 = [
         display: flex;
         justify-content: start;
         align-items: start;
+        flex-wrap: wrap;
 
-        .table {
-            height: 101%;
+        .box-card{
+            width: 20%;
+            height: 45%;
+            display: flex;
+            flex-direction: column;
+            justify-content: start;
+            align-items: center;
+            box-shadow: 0 0 10px #ddd;
+            border-radius: 5px;
+            margin: 15px 15px 15px 15px;
+            position: relative;
+            left: 80px;
+
+            img{
+                width: 150px;
+                height: 150px;
+                border-radius: 5px 5px 0 0;
+            }
+
+            .text{
+                width: 100%;
+                height: 50px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+
+                span:nth-child(1) {
+                    font-size: 16px;
+                    font-weight: 700;
+                    color: #333;
+                }
+    
+                span:nth-child(2) {
+                    width: 50px;
+                    height: 25px;
+                    font-size: 14px;
+                    font-weight: 500;
+                    color: #e9f1ea;
+                    background-color: rgb(66, 220, 125);
+                    border-radius: 10px;
+                    text-align: center;
+                    line-height: 25px;
+                }
+            }
+
+        }
+
+        .box-card:hover{
+            box-shadow: 0 0 10px #ddd;
+            scale: 1.1;
         }
     }
 

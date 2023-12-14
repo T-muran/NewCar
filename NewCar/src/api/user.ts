@@ -31,3 +31,11 @@ export const getAllUser = (params:any) => {
         params
     });
 }
+
+export const getAllEmployee = (params:any) => {
+    return request({
+        url: "/getAllEmployee",
+        method: "get",
+        params
+    });
+}

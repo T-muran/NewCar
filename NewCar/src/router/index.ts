@@ -69,9 +69,9 @@ const routes: Array<RouteRecordRaw> = [
                 component: () => import('../views/layout/userList.vue'),
             },
             {
-                path:'blackList',
-                name:'BlackList',
-                component: () => import('../views/layout/blackList.vue'),
+                path:'adminList',
+                name:'AdminList',
+                component: () => import('../views/layout/adminList.vue'),
             }
         ],
         meta: {

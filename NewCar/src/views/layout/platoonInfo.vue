@@ -9,25 +9,27 @@
             </div>
         </div>
         <div class="container">
-            <el-table :data="tableData" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }"
+            <el-table :data="tableData" :row-style="{height: '60px'}" :cell-style="{ textAlign: 'center' }" :header-cell-style="{ textAlign: 'center' }"
                 class="table">
                 <el-table-column fixed prop="leaderName" label="车队领队" width="150" />
                 <el-table-column prop="createTime" label="起始时间" width="110" />
                 <el-table-column prop="endTime" label="结束时间" width="110" />
-                <el-table-column prop="status" label="车队状态" width="120" />
-                <el-table-column prop="carNum" label="车辆数量" width="120" />
-                <el-table-column prop="startPoint" label="车队起点" width="320" />
-                <el-table-column prop="startPoint" label="车队终点" width="320" />
-                <el-table-column fixed="right" label="操作" width="120">
+                <el-table-column prop="status" label="车队状态" min-width="120" />
+                <el-table-column prop="carNum" label="车辆数量" min-width="120" />
+                <el-table-column prop="platoonSpacing" label="车队间距" min-width="120" />
+                <el-table-column prop="platoonSpeed" label="车队配速" min-width="120" />
+                <el-table-column prop="startPoint" label="车队起点" min-width="320" />
+                <el-table-column prop="startPoint" label="车队终点" min-width="320" />
+                <!-- <el-table-column fixed="right" label="操作" min-width="120">
                     <template #default>
-                        <el-button link type="primary" size="small" v-model:current-page="currPage" @click="handleClick">查看信息</el-button>
+                        <el-button link type="primary" size="small"  @click="handleClick">查看信息</el-button>
                     </template>
-                </el-table-column>
+                </el-table-column> -->
             </el-table>
         </div>
         <div class="line"></div>
         <div class="foot">
-            <el-pagination background layout="prev, pager, next" :total=pageInfo.total :page-size=pageInfo.size @click="clickEvent" class="m-2" />
+            <el-pagination background layout="prev, pager, next" v-model:current-page="currPage" :total=pageInfo.total :page-size=pageInfo.size @click="clickEvent" class="m-2" />
         </div>
     </div>
 </template>
@@ -79,11 +81,15 @@ const options1 = [
         value: 2,
         label: '事故',
     },
+    {
+        value: 3,
+        label: '全部',
+    },
 ]
 
-const handleClick = () => {
-    console.log('click')
-}
+// const handleClick = () => {
+//     console.log('click')
+// }
 
 const tableData = reactive([
     {}
@@ -106,11 +112,23 @@ const getVal = async () => {
     //tableData第一个元素为{}，所以需要先删除
     tableData.splice(0,1)
     toRaw(tableData).push(...res)
+    //对时间进行格式化
+    toRaw(tableData).forEach((item:any) => {
+        item.createTime = formatTime(item.createTime)
+        item.endTime = formatTime(item.endTime)
+    })
 
     pageInfo.curr=carData.carData.values.data.current
     pageInfo.size=carData.carData.values.data.size
     pageInfo.total=carData.carData.values.data.total
 };
+
+//对时间进行格式化 2023-01-05T01:15:27 => 2023-01-05 01:15:27
+const formatTime = (time:string) => {
+    const arr = time.split('T')
+    const arr1 = arr[1].split('.')
+    return arr[0] + ' ' + arr1[0]
+}
 
 const search = async() =>{
     await carData.getPlatoonData2(searchData.value)
@@ -120,13 +138,15 @@ const search = async() =>{
     tableData.splice(0,tableData.length)
 
     toRaw(tableData).push(...res)
-    console.log(tableData)
+    //对时间进行格式化
+    toRaw(tableData).forEach((item:any) => {
+        item.createTime = formatTime(item.createTime)
+        item.endTime = formatTime(item.endTime)
+    })
 
     pageInfo.curr=carData.carData.values.data.current
     pageInfo.size=carData.carData.values.data.size
     pageInfo.total=carData.carData.values.data.total
-
-    console.log(pageInfo)
 }
 
 const currPage = ref(1)
@@ -152,6 +172,10 @@ const clickEvent = () => {
 }
 
 const selectChange = (item:number) => {
+    if(item === 3){
+        searchData.value.status = undefined
+        return
+    }
     searchData.value.status = item
 }
 
@@ -228,4 +252,4 @@ const selectChange = (item:number) => {
 
     transition: all 0.5s;
 }
-</style>../../stores/modules/platoonInfo
+</style>
