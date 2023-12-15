@@ -44,14 +44,23 @@
                 </template>
                 <el-menu-item-group>
                     <el-menu-item index="userList">用户列表</el-menu-item>
-                    <el-menu-item v-if="userData.userName==='admin'" index="adminList">管理员列表</el-menu-item>
+                    <el-menu-item v-if="userData.userName === 'admin'" index="adminList">管理员列表</el-menu-item>
                 </el-menu-item-group>
             </el-sub-menu>
+            <div class="head">
+
+                <el-sub-menu index="5" id="one">
+                    <template #title>
+                        <img :src="userData.avatar" alt="">
+                    </template>
+                    <el-menu-item-group>
+                        <el-menu-item index="userInfo">个人信息</el-menu-item>
+                        <el-menu-item @click="logout">退出登录</el-menu-item>
+                    </el-menu-item-group>
+                </el-sub-menu>
+            </div>
         </el-menu>
 
-        <div class="head">
-            <img :src="userData.avatar" alt="">
-        </div>
     </div>
 </template>
 
@@ -60,22 +69,13 @@ import carLogo from '../../../assets/carLogo.vue'
 import { anim } from '../../../stores/modules/animator';
 import { onBeforeRouteLeave } from 'vue-router';
 import router from '../../../router/index'
-import {
-    House,
-    Memo,
-    Van,
-    User,
+import { House, Memo, Van, User, } from '@element-plus/icons-vue'
+import { useUserStore } from '../../../stores/modules/user'
 
-} from '@element-plus/icons-vue'
-import {useUserStore} from '../../../stores/modules/user'
 
 const userStore = useUserStore()
-
 const userData = userStore.getUserInfo()
-
 const animator = anim();
-
-console.log(userData);
 
 //鼠标移动到侧边栏时，侧边栏展开,logo显示
 const mouseover = () => {
@@ -91,7 +91,7 @@ const mouseleave = () => {
     logo.classList.remove('show')
 }
 
-onBeforeRouteLeave((to, from, next) => { 
+onBeforeRouteLeave((to, from, next) => {
     if (to.path === '/login') {
         next()
         return
@@ -109,6 +109,12 @@ onBeforeRouteLeave((to, from, next) => {
         return
     }
 })
+
+
+//退出登录
+const logout = () => {
+    userStore.logout()
+}
 
 </script>
 
@@ -146,5 +152,40 @@ onBeforeRouteLeave((to, from, next) => {
 
 .logo.show {
     opacity: 1;
+}
+
+.head {
+    position: absolute;
+    bottom: 10%;
+    width: 100%;
+    height: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    img {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+    }
+
+    img:hover {
+        scale: 1.1;
+        cursor: pointer;
+    }
+}
+
+:deep(#one) .el-menu-item-group {
+    position: relative;
+    left: -16px;
+}
+
+:deep(#one) .el-icon {
+    display: none;
+}
+
+:deep(#one) :hover {
+    color: #1890FF;
+    background: #fff;
 }
 </style>

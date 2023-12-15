@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
-import { ref } from "vue";
+import { isRef, ref } from "vue";
 import { userType } from './types'
 import { UserResult, login1 } from '../../api/login'
 import { setToken, removeToken,setUser } from '../../utils/auth'
 import router from '../../router/index'
-import { getAllUser,getAllEmployee } from '../../api/user'
+import { getAllUser,getAllEmployee,getEmployeeInfo } from '../../api/user'
 
 //个人信息
 export const useUserStore = defineStore('user', () => {
@@ -25,6 +25,8 @@ export const useUserStore = defineStore('user', () => {
         try {
             const res = await login1(data)
             const result = res.data
+            result.data.avatar = 'http://159.75.147.119:8080' + result.data.avatar;
+            console.log(result.data.avatar);
             if (result.code) {
                 userInfo.value = result.data
                 setUser(result.data)
@@ -40,7 +42,11 @@ export const useUserStore = defineStore('user', () => {
 
     //退出登录
     const logout = () => {
+        //清除token
         removeToken()
+        //清除用户信息
+        localStorage.removeItem('user')
+        //重定向到登录页面
         router.push('/login')
     }
 
@@ -67,7 +73,8 @@ export const useUserStore = defineStore('user', () => {
 //用户信息
 export const usersInfo = defineStore('usersInfo', () => {
     const users = ref([])
-
+    
+    const adminUser = ref({})
     //获取所有用户信息
     const getUsersInfo = async (data?: any) => {
         try {
@@ -92,9 +99,23 @@ export const usersInfo = defineStore('usersInfo', () => {
         }
     }
 
+    const EmployeeInfo = async () => {
+        try {
+            const res = await getEmployeeInfo()
+            if (res) {
+                adminUser.value = res.data
+            }
+        } catch (error) {
+            console.error('获取管理员信息失败:', error)
+        }
+        console.log(isRef(adminUser));
+    }
+
     return {
         users,
+        adminUser,
         getUsersInfo,
         getAdminInfo,
+        EmployeeInfo,
     }
 })

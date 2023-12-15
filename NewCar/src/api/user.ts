@@ -39,3 +39,10 @@ export const getAllEmployee = (params:any) => {
         params
     });
 }
+
+export const getEmployeeInfo = () => {
+    return request({
+        url: "/getEmployeeInfo",
+        method: "get",
+    });
+}

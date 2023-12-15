@@ -66,7 +66,7 @@
                 </div>
             </el-card>
         </div>
-        <el-button type="primary">查看车队</el-button>
+        <el-button type="primary" @click="click">查看车队</el-button>
     </el-card>
 </template>
 
@@ -123,6 +123,11 @@ watch(toRef(mapDataInfo, 'mapData'), (newVal, oldVal) => {
 })
 
 ///TODO : 返回父组件点击事件
+const emit = defineEmits(['clickCar'])
+
+const click = () => {
+    emit('clickCar')
+}
 
 </script>
 <style lang="less" scoped>
