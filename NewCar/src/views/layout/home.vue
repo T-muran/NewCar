@@ -74,4 +74,4 @@ onMounted(async () => {
         box-sizing: border-box;
     }
 }   
-</style>../../stores/modules/platoonInfo
+</style>

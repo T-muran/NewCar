@@ -35,6 +35,18 @@ const routes: Array<RouteRecordRaw> = [
         }
     },
     {
+        path: '/register',
+        name: 'Register',
+        component: () => import('../views/login/register.vue'),
+        meta: {
+            title: '注册',
+            icon: 'el-icon-s-home',
+            hidden: true,
+            breadcrumb: false,
+            transition: 'animate__fadeIn'
+        }
+    },
+    {
         path: '/home',
         component: () => import('../views/layout/index.vue'),
         children: [
@@ -81,6 +93,24 @@ const routes: Array<RouteRecordRaw> = [
         ],
         meta: {
             title: 'home',
+            icon: 'el-icon-s-home',
+            hidden: true,
+            breadcrumb: false,
+            transition: 'animate__fadeIn'
+        }
+    },
+    {
+        path: '/userSpace',
+        component: () => import('../views/userLayout/index.vue'),
+        children:[
+            {
+                path:'',
+                name:'UserSpace',
+                component: () => import('../views/userLayout/userSpace.vue'),
+            }
+        ],
+        meta: {
+            title: 'userSpace',
             icon: 'el-icon-s-home',
             hidden: true,
             breadcrumb: false,

@@ -1,7 +1,7 @@
 import { defineStore } from 'pinia'
 import { isRef, ref } from "vue";
 import { userType } from './types'
-import { UserResult, login1 } from '../../api/login'
+import { UserResult, login1,login2 } from '../../api/login'
 import { setToken, removeToken,setUser } from '../../utils/auth'
 import router from '../../router/index'
 import { getAllUser,getAllEmployee,getEmployeeInfo } from '../../api/user'
@@ -40,6 +40,24 @@ export const useUserStore = defineStore('user', () => {
         }
     }
 
+    //普通用户登录
+    const loginUser = async (data: any) => {
+        try {
+            const res = await login2(data)
+            const result = res.data
+            console.log(result.data);
+            if (result.code) {
+                userInfo.value = result.data
+                setUser(result.data)
+                setToken(result.data.jwt)
+                router.push('/userSpace')
+            }
+        } catch (error) {
+            console.log('登录失败:', error)
+            error.value = error.message
+        }
+    }
+
     //退出登录
     const logout = () => {
         //清除token
@@ -66,7 +84,8 @@ export const useUserStore = defineStore('user', () => {
         loginAdmin,
         logout,
         userInfo,
-        getUserInfo
+        getUserInfo,
+        loginUser,
     }
 })
 

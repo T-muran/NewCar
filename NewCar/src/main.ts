@@ -7,7 +7,7 @@ import ElementPlus from 'element-plus'
 import 'element-plus/dist/index.css'
 import Bar from './utils/loadingBar'
 
-const whiteList = ['/login','/404']
+const whiteList = ['/login','/404','/register']
 
 router.beforeEach((to,from,next) => {
     Bar.component?.exposed?.startLoading() 

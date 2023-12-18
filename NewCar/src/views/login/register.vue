@@ -1,16 +1,16 @@
 <template>
     <div class="login">
         <div class="background">
-            <div class="picture"></div>
             <div class="container">
-                <Login />
+                <Register/>
             </div>
+            <div class="picture"></div>
         </div>
     </div>
 </template>
 
 <script setup lang='ts'>
-import Login from './components/login.vue'
+import Register from './components/register.vue'
 
 </script>
 
@@ -31,8 +31,8 @@ import Login from './components/login.vue'
 
         .picture {
             height: 100%;
-            width: 50%;
-            background: url("../../assets/login/login.png");
+            width: 50%; 
+            background: url("../../assets/login/register.png");
             background-size: cover;
         }
         

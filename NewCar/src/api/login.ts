@@ -38,3 +38,37 @@ export const login1 = (data: any) => {
         console.log(error);
     });
 }
+
+export const login2 = (data: any) => {
+    return request({
+        url: "/userLogin",
+        method: "post",
+        data
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+
+export const getCode = (params:any) => {
+    return request({
+        url: "/getCode",
+        method: "get",
+        params
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
+
+export const register = (data: any) => {
+    return request({
+        url: "/register",
+        method: "post",
+        data
+    })
+    .catch((error) => {
+        console.log(error);
+    });
+}
