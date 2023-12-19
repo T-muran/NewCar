@@ -1,10 +1,10 @@
 import { defineStore } from 'pinia'
 import { isRef, ref } from "vue";
 import { userType } from './types'
-import { UserResult, login1,login2 } from '../../api/login'
-import { setToken, removeToken,setUser } from '../../utils/auth'
+import { UserResult, login1, login2 } from '../../api/login'
+import { setToken, removeToken, setUser } from '../../utils/auth'
 import router from '../../router/index'
-import { getAllUser,getAllEmployee,getEmployeeInfo } from '../../api/user'
+import { getAllUser, getAllEmployee, getEmployeeInfo, updateUserInfo } from '../../api/user'
 
 //个人信息
 export const useUserStore = defineStore('user', () => {
@@ -45,7 +45,6 @@ export const useUserStore = defineStore('user', () => {
         try {
             const res = await login2(data)
             const result = res.data
-            console.log(result.data);
             if (result.code) {
                 userInfo.value = result.data
                 setUser(result.data)
@@ -76,7 +75,7 @@ export const useUserStore = defineStore('user', () => {
         }
         return {}
     }
-    
+
 
     return {
         userSet,
@@ -92,9 +91,13 @@ export const useUserStore = defineStore('user', () => {
 //用户信息
 export const usersInfo = defineStore('usersInfo', () => {
     const users = ref([])
-    
+
     const adminUser = ref({})
-    //获取所有用户信息
+
+    const user = ref({})
+    //
+    //#region 管理员
+    //获取所有用户表信息
     const getUsersInfo = async (data?: any) => {
         try {
             const res = await getAllUser(data)
@@ -102,11 +105,11 @@ export const usersInfo = defineStore('usersInfo', () => {
                 users.value = res.data
             }
         } catch (error) {
-            console.error('获取用户信息失败:', error)
+            console.error('获取管理员信息失败:', error)
         }
     }
 
-    //获取管理员信息
+    //获取管理员表信息
     const getAdminInfo = async (data?: any) => {
         try {
             const res = await getAllEmployee(data)
@@ -127,10 +130,16 @@ export const usersInfo = defineStore('usersInfo', () => {
         } catch (error) {
             console.error('获取管理员信息失败:', error)
         }
-        console.log(isRef(adminUser));
     }
 
+    //#endregion
+    
+    //#region 用户
+
+    //#endregion
+
     return {
+        user,
         users,
         adminUser,
         getUsersInfo,
