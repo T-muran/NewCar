@@ -1,11 +1,11 @@
 <template>
     <div class="aside">
-        <el-menu router default-active="2" class="el-menu-vertical-demo" :collapse="animator.animations.isCollapse"
+        <el-menu router  class="el-menu-vertical-demo" :collapse="animator.animations.isCollapse"
             @mouseover="mouseover" @mouseleave="mouseleave">
             <div class="logo">
                 <carLogo />
             </div>
-            <el-menu-item index="home" class="first">
+            <el-menu-item index="userSpace" class="first">
                 <el-icon>
                     <House />
                 </el-icon>
@@ -16,11 +16,10 @@
                     <el-icon>
                         <Memo />
                     </el-icon>
-                    <span>车队管理</span>
+                    <span>车队信息</span>
                 </template>
                 <el-menu-item-group>
-                    <el-menu-item index="platoonInfo">车队信息</el-menu-item>
-                    <el-menu-item index="map">地图界面</el-menu-item>
+                    <el-menu-item index="userMap">地图界面</el-menu-item>
                 </el-menu-item-group>
             </el-sub-menu>
             <div class="head">
@@ -30,7 +29,6 @@
                         <img :src="userData.avatar" alt="">
                     </template>
                     <el-menu-item-group>
-                        <el-menu-item index="userInfo">个人信息</el-menu-item>
                         <el-menu-item @click="logout">退出登录</el-menu-item>
                     </el-menu-item-group>
                 </el-sub-menu>
@@ -73,14 +71,14 @@ onBeforeRouteLeave((to, from, next) => {
         next()
         return
     }
-    if (to.path === '/home/home') {
-        to.path = '/home'
+    if (to.path === '/userSpace/userSpace') {
+        to.path = '/userSpace'
         next(false)
         router.push(to.path)
         return
     }
-    if (from.path === '/home') {
-        to.path = '/home' + to.path
+    if (from.path === '/userSpace') {
+        to.path = '/userSpace' + to.path
         next(false)
         router.push(to.path)
         return

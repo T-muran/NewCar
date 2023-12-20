@@ -8,13 +8,16 @@
 import cityData from '../../assets/json/pca-code.json'
 import { ref, unref } from 'vue'
 
+const emit = defineEmits(['change'])
 const value = ref('')
 
 const cascaderAddr = ref()
 
 const handleChange = () => {
     let addrNode = unref(cascaderAddr).getCheckedNodes()[0].pathLabels
-    console.log(addrNode)
+    //将数组转换为字符串
+    addrNode = addrNode.join('')
+    emit('change', addrNode)
 }
 
 const options = cityData

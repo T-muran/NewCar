@@ -49,10 +49,11 @@ export const getEmployeeInfo = () => {
 }
 
 //用户信息
-export const updateUserInfo = () => {
+export const updateUserInfo = (data:any) => {
     return request({
         url: "/updateUserInfo",
         method: "post",
+        data,
     });
 }
 

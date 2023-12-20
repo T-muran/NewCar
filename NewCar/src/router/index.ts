@@ -107,6 +107,11 @@ const routes: Array<RouteRecordRaw> = [
                 path:'',
                 name:'UserSpace',
                 component: () => import('../views/userLayout/userSpace.vue'),
+            },
+            {
+                path:'userMap',
+                name:'UserMap',
+                component: () => import('../views/userLayout/map.vue'),
             }
         ],
         meta: {

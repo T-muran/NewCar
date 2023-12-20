@@ -45,6 +45,7 @@ export const useUserStore = defineStore('user', () => {
         try {
             const res = await login2(data)
             const result = res.data
+            result.data.avatar = 'http://159.75.147.119:8080' + result.data.avatar;
             if (result.code) {
                 userInfo.value = result.data
                 setUser(result.data)
