@@ -68,13 +68,13 @@
         <el-dialog v-model="PWFormVisible" title="修改密码">
             <el-form :model="form2" ref="form3" :rules="rules2">
                 <el-form-item prop="oldPW" label="旧密码" :label-width="formLabelWidth">
-                    <el-input v-model="form2.oldPW" autocomplete="off" />
+                    <el-input type="password" v-model="form2.oldPW" autocomplete="off" />
                 </el-form-item>
                 <el-form-item prop="newPW" label="新密码" :label-width="formLabelWidth">
-                    <el-input v-model="form2.newPW" autocomplete="off" />
+                    <el-input type="password" v-model="form2.newPW" autocomplete="off" />
                 </el-form-item>
                 <el-form-item prop="confirmPW" label="确认密码" :label-width="formLabelWidth">
-                    <el-input v-model="form2.confirmPW" autocomplete="off" />
+                    <el-input type="password" v-model="form2.confirmPW" autocomplete="off" />
                 </el-form-item>
             </el-form>
             <template #footer>
@@ -92,10 +92,11 @@
 <script setup lang='ts'>
 import CarInfo from './components/carInfo.vue';
 import { useUserStore } from '../../stores/modules/user';
-import { updateUserInfo,changePassWord } from '../../api/user'
-import { reactive, ref } from 'vue';
+import { updateUserInfo, changePassWord } from '../../api/user'
+import { onMounted, reactive, ref } from 'vue';
 import CitySelect from '../components/citySelect.vue';
 import { ElMessage } from 'element-plus'
+import { setUser } from '../../utils/auth';
 
 const userInfo = useUserStore();
 
@@ -111,7 +112,22 @@ type FormData = {
     avatar: string,
 }
 
-const data = userInfo.getUserInfo()
+const data = reactive({
+    id: userInfo.getUserInfo().id,
+    userName: userInfo.getUserInfo().userName,
+    name: userInfo.getUserInfo().name,
+    sex: userInfo.getUserInfo().sex,
+    email: userInfo.getUserInfo().email,
+    phoneNum: userInfo.getUserInfo().phoneNum,
+    birthDate: userInfo.getUserInfo().birthDate,
+    idNumber: userInfo.getUserInfo().idNumber,
+    address: userInfo.getUserInfo().address,
+    avatar: userInfo.getUserInfo().avatar,
+})
+
+onMounted(() => {
+
+})
 
 const options = [
     {
@@ -153,7 +169,21 @@ const changeState = () => {
     console.log(formData);
     formData.address += address.value
     updateUserInfo(formData).then(res => {
-        console.log(res);
+        if (res.data.code === 0) {
+            return
+        }
+        res.data.data.avatar = 'http://159.75.147.119:8080' + res.data.data.avatar
+        //更新用户信息
+        setUser(res.data.data)
+        data.id = res.data.data.id
+        data.userName = res.data.data.userName
+        data.name = res.data.data.name
+        data.sex = res.data.data.sex
+        data.email = res.data.data.email
+        data.phoneNum = res.data.data.phoneNum
+        data.birthDate = res.data.data.birthDate
+        data.idNumber = res.data.data.idNumber
+        data.address = res.data.data.address
     })
     dialogFormVisible.value = false
 }
@@ -205,13 +235,13 @@ type Rules2 = {
 }
 
 const validatePass2 = (rule: any, value: any, callback: any) => {
-  if (value === '') {
-    callback(new Error('请确认密码'))
-  } else if (value !== form2.newPW) {
-    callback(new Error("两次输入密码不一致"))
-  } else {
-    callback()
-  }
+    if (value === '') {
+        callback(new Error('请确认密码'))
+    } else if (value !== form2.newPW) {
+        callback(new Error("两次输入密码不一致"))
+    } else {
+        callback()
+    }
 }
 
 const rules2 = reactive<Rules2>({
@@ -228,8 +258,14 @@ const changePassWords = () => {
         oldPassWord: form2.oldPW,
         newPassWord: form2.newPW
     }
-    
-    changePassWord(data)
+
+    changePassWord(data).then(res => {
+        if (res.data.code === 0) {
+            return
+        }
+        //退出登录
+        userInfo.logout()
+    })
     PWFormVisible.value = false
 }
 

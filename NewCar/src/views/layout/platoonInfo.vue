@@ -14,12 +14,13 @@
                 <el-table-column fixed prop="leaderName" label="车队领队" width="150" />
                 <el-table-column prop="createTime" label="起始时间" width="110" />
                 <el-table-column prop="endTime" label="结束时间" width="110" />
+                <el-table-column prop="id" label="车队id" min-width="180" />
                 <el-table-column prop="status" label="车队状态" min-width="120" />
                 <el-table-column prop="carNum" label="车辆数量" min-width="120" />
                 <el-table-column prop="platoonSpacing" label="车队间距" min-width="120" />
                 <el-table-column prop="platoonSpeed" label="车队配速" min-width="120" />
-                <el-table-column prop="startPoint" label="车队起点" min-width="320" />
-                <el-table-column prop="startPoint" label="车队终点" min-width="320" />
+                <el-table-column prop="startPoint" label="车队起点" min-width="270" />
+                <el-table-column prop="startPoint" label="车队终点" min-width="270" />
                 <!-- <el-table-column fixed="right" label="操作" min-width="120">
                     <template #default>
                         <el-button link type="primary" size="small"  @click="handleClick">查看信息</el-button>

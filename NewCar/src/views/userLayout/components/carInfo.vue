@@ -10,7 +10,7 @@
             <div class="container">
                 <el-card class="box-card2" v-for="item in carInfo" :key="item">
                     <img :src=item.avatar alt="">
-                    <el-icon class="close" @click="deleteCars(item)"><Close /></el-icon>
+                    <el-icon class="close" @click="deleteVisible = true"><Close /></el-icon>
                     <el-icon class="edit" @click="updatedCars(item)"><Edit /></el-icon>
                     <div class="text">
                         <span>{{ item.carPlate }}</span>
@@ -62,7 +62,7 @@
                 <template #footer>
                     <span class="dialog-footer">
                         <el-button @click="deleteVisible = false">取消</el-button>
-                        <el-button type="primary">
+                        <el-button type="primary" @click="deleteCars">
                             确认
                         </el-button>
                     </span>
@@ -107,13 +107,15 @@
 <script setup lang='ts'>
 import { watch, onMounted, ref, reactive } from 'vue';
 import { anim } from '../../../stores/modules/animator';
-import { getUserCar, addCar,deleteCar,updatedUserCar } from '../../../api/user'
+import { addCar,deleteCar,updatedUserCar } from '../../../api/user'
+import {useUserCarStore} from '../../../stores/modules/car'
 import { useUserStore } from '../../../stores/modules/user'
 import { ElMessage } from 'element-plus'
 import { Close,Edit } from '@element-plus/icons-vue'
 
 const animator = anim();
 const userStore = useUserStore()
+const userCarStore = useUserCarStore()
 
 const userId = {
     userId: userStore.getUserInfo().id
@@ -125,13 +127,11 @@ onMounted(() => {
 })
 
 const getCarInfo = async () => {
-    const res = await getUserCar(userId);
+    await userCarStore.getAllCar(userId);
     // 清除原先carInfo
     carInfo.splice(0, carInfo.length);
-    carInfo.push(...res.data.data);
-    carInfo.forEach(item => {
-        item.avatar = 'http://159.75.147.119:8080/' + item.avatar;
-    });
+    carInfo.push(...userCarStore.carInfo);
+    console.log(carInfo);
 };
 
 watch(() => animator.animations.isCollapse,
@@ -247,7 +247,7 @@ const onSubmit2 = () => {
                 carHeight: formData1.carHeight,
                 color: formData1.color,
                 isRenewable: formData1.isRenewable,
-                avatar: '/images/test.jpg',
+                avatar: '/images/car.jpg',
             }
             updatedUserCar(data)
             updateCarFormVisible.value = false

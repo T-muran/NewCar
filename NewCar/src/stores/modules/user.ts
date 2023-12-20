@@ -64,6 +64,7 @@ export const useUserStore = defineStore('user', () => {
         removeToken()
         //清除用户信息
         localStorage.removeItem('user')
+        localStorage.removeItem('userCar')
         //重定向到登录页面
         router.push('/login')
     }

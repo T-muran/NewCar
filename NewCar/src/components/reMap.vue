@@ -106,6 +106,8 @@ onMounted(() => {
                             userId: data[0].userId,
                         }
                         mapdata.getPlatoonData(userId).then();
+                        console.log(lnglat);
+                        
                         //逆地理编码
                         geocoder.getAddress(lnglat, (status, result) => {
                             if (status === "complete" && result.info === "OK") {

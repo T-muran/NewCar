@@ -123,11 +123,7 @@ watch(toRef(mapDataInfo, 'mapData'), (newVal, oldVal) => {
 })
 
 ///TODO : 返回父组件点击事件
-const emit = defineEmits(['clickCar'])
 
-const click = () => {
-    emit('clickCar')
-}
 
 </script>
 <style lang="less" scoped>

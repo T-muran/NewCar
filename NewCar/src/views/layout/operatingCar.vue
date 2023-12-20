@@ -1,9 +1,7 @@
 <template>
     <div class="userList">
         <div class="top">
-            <SearchBar info="搜索用户名字" />
-            <div class="selector">
-            </div>
+
         </div>
         <div class="line"></div>
         <div class="container">

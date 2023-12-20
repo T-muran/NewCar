@@ -1,6 +1,6 @@
 <template>
     <div class="aside">
-        <el-menu router default-active="2" class="el-menu-vertical-demo" :collapse="animator.animations.isCollapse"
+        <el-menu router class="el-menu-vertical-demo" :collapse="animator.animations.isCollapse"
             @mouseover="mouseover" @mouseleave="mouseleave">
             <div class="logo">
                 <carLogo />
