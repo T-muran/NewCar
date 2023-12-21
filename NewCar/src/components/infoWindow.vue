@@ -38,7 +38,7 @@
         <div class="leaderInfo">
             <el-card class="info-card">
                 <div class="head">
-                    <span>领队信息</span>
+                    <span>用户信息</span>
                     <div class="leader-text">
                         <div class="headInfo">
                             <img :src=avatar alt="">

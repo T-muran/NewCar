@@ -165,6 +165,7 @@ const getPlatoonData = async () => {
         mapData.value.endPoint = '---'
         mapData.value.platoonSpacing = 0
         mapData.value.platoonSpeed = 0
+        mapData.value.id = '---'
         if(marker) {
             map.remove(marker)
         }

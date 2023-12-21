@@ -14,12 +14,22 @@ import { onMounted, reactive } from 'vue';
 import { useUserStore } from '../../../stores/modules/user';
 import { getUser } from '../../../utils/auth';
 import { useRouter } from 'vue-router';
+import { getInfo } from '../../../api/user'
+import {setUser} from '../../../utils/auth'
 
 const userStore = useUserStore()
 const router = useRouter()
 //如果userStore.userInfo为{}，则从localStorage中获取
 
 onMounted(() => {
+    getInfo().then(res => {
+        userStore.userInfo.carTotal = res.data.data.carTotal
+        userStore.userInfo.platoonTotal = res.data.data.platoonTotal
+        userStore.userInfo.runningCarTotal = res.data.data.runningCarTotal
+        userStore.userInfo.userTotal = res.data.data.userTotal
+        setUser(userStore.userInfo)
+    })
+
     if (Object.keys(userStore.userInfo).length === 0) {
         userStore.userInfo = getUser()
         //如果userStore.userInfo为{}，则跳转到登录页面
@@ -94,4 +104,5 @@ const data = reactive([{
             color: #000;
         }
     }
-}</style>
+}
+</style>

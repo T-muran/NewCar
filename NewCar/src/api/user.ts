@@ -96,3 +96,10 @@ export const deleteCar = (data:any) => {
         data
     });
 }
+
+export const getInfo = () => {
+    return request({
+        url: "/getInfo",
+        method: "get",
+    });
+}
