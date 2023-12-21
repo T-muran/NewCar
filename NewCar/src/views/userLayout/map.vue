@@ -9,11 +9,12 @@
                 </div>
             </template>
             <div class="contain">
-                <span>领队姓名: {{ mapData.name }}</span>
-                <span>起点: {{ mapData.startPoint }}</span>
-                <span>终点: {{ mapData.endPoint }}</span>
-                <span>车队配速: {{ mapData.platoonSpeed }}</span>
-                <span>车队间距: {{ mapData.platoonSpacing }}</span>
+                <span>车队邀请码 : {{ mapData.id }}</span>
+                <span>领队姓名 : {{ mapData.name }}</span>
+                <span>起点 : {{ mapData.startPoint }}</span>
+                <span>终点 : {{ mapData.endPoint }}</span>
+                <span>车队配速 : {{ mapData.platoonSpeed }}</span>
+                <span>车队间距 : {{ mapData.platoonSpacing }}</span>
             </div>
             <div class="buttons">
                 <el-button v-if="!inPlatoon" class="button" @click="createVisible = true">创建车队</el-button>
@@ -162,6 +163,8 @@ const getPlatoonData = async () => {
         mapData.value.name = '---'
         mapData.value.startPoint = '---'
         mapData.value.endPoint = '---'
+        mapData.value.platoonSpacing = 0
+        mapData.value.platoonSpeed = 0
         if(marker) {
             map.remove(marker)
         }

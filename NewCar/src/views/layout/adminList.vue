@@ -5,35 +5,18 @@
             <div class="selector"></div>
         </div>
         <div class="container">
-            <el-table
-                :data="tableData"
-                :row-style="{ height: '60px' }"
-                :cell-style="{ textAlign: 'center' }"
-                :header-cell-style="{ textAlign: 'center' }"
-                class="table"
-            >
+            <el-table :data="tableData" :row-style="{ height: '60px' }" :cell-style="{ textAlign: 'center' }"
+                :header-cell-style="{ textAlign: 'center' }" class="table">
                 <el-table-column fixed prop="userName" label="用户名" width="150" />
                 <el-table-column prop="id" label="管理员id" min-width="180" />
                 <el-table-column prop="idNumber" label="身份证号" min-width="180" />
                 <el-table-column prop="phoneNum" label="手机号" min-width="180" />
                 <el-table-column fixed="right" label="操作" min-width="120">
                     <template #default="{ row }">
-                        <el-button
-                            link
-                            type="primary"
-                            size="small"
-                            @click="handleClick(row)"
-                            v-if="row.status === 1"
-                        >
+                        <el-button link type="primary" size="small" @click="handleClick(row)" v-if="row.status === 1">
                             禁用
                         </el-button>
-                        <el-button
-                            link
-                            type="primary"
-                            size="small"
-                            @click="handleClick(row)"
-                            v-else-if="row.status === 0"
-                        >
+                        <el-button link type="primary" size="small" @click="handleClick(row)" v-else-if="row.status === 0">
                             启用
                         </el-button>
                     </template>
@@ -45,17 +28,21 @@
             <span>
                 <dialogButton />
             </span>
-            <el-pagination
-                background
-                layout="prev, pager, next"
-                :total="pageInfo.total"
-                :page-size="pageInfo.size"
-                @click="clickEvent"
-                v-model:current-page="pageInfo.curr"
-                class="m-2"
-            />
+            <el-pagination background layout="prev, pager, next" :total="pageInfo.total" :page-size="pageInfo.size"
+                @click="clickEvent" v-model:current-page="pageInfo.curr" class="m-2" />
         </div>
     </div>
+    <el-dialog v-model="dialogVisible" title="Tips" width="30%">
+        <span>This is a message</span>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="dialogVisible = false">Cancel</el-button>
+                <el-button type="primary" @click="dialogVisible = false">
+                    Confirm
+                </el-button>
+            </span>
+        </template>
+    </el-dialog>
 </template>
 
 <script setup lang="ts">
@@ -81,6 +68,8 @@ watch(
         adminList.classList.toggle("hide", !animator.animations.isCollapse);
     }
 );
+
+const dialogVisible = ref(false);
 
 const handleClick = (row) => {
     row.status = row.status === 1 ? 0 : 1;
@@ -217,6 +206,7 @@ const clickEvent = () => {
 
         span {
             margin-left: 50px;
+
             .el-button {
                 width: 100px;
                 height: 30px;
@@ -224,6 +214,7 @@ const clickEvent = () => {
                 font-size: 15px;
             }
         }
+
         .el-pagination {
             margin-right: 50px;
         }

@@ -10,7 +10,7 @@
             <div class="container">
                 <el-card class="box-card2" v-for="item in carInfo" :key="item">
                     <img :src=item.avatar alt="">
-                    <el-icon class="close" @click="deleteVisible = true"><Close /></el-icon>
+                    <el-icon class="close" @click="showDelete(item)"><Close /></el-icon>
                     <el-icon class="edit" @click="updatedCars(item)"><Edit /></el-icon>
                     <div class="text">
                         <span>{{ item.carPlate }}</span>
@@ -112,6 +112,7 @@ import {useUserCarStore} from '../../../stores/modules/car'
 import { useUserStore } from '../../../stores/modules/user'
 import { ElMessage } from 'element-plus'
 import { Close,Edit } from '@element-plus/icons-vue'
+import { de } from 'element-plus/es/locale/index.mjs';
 
 const animator = anim();
 const userStore = useUserStore()
@@ -210,12 +211,17 @@ const onSubmit1 = () => {
 
 //#region 删除车辆
 const deleteVisible = ref(false)
+const deleteForm = {
+    userId: userStore.getUserInfo().id,
+    id: ''
+}
+
+const showDelete = (value:any) => {
+    deleteVisible.value = true
+    deleteForm.id = value.id
+}
 
 const deleteCars =async (value) => {
-    const deleteForm = {
-        userId: userStore.getUserInfo().id,
-        id: value.id
-    }
     await deleteCar(deleteForm)
     deleteVisible.value = false
     getCarInfo()

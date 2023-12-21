@@ -118,6 +118,16 @@ const getVal = async () => {
         item.createTime = formatTime(item.createTime)
         item.endTime = formatTime(item.endTime)
     })
+    //如果tableData.status===0,则改为已结束，如果为1，则改为运行中，如果为2，则改为事故
+    toRaw(tableData).forEach((item:any) => {
+        if(item.status === 0){
+            item.status = '已结束'
+        }else if(item.status === 1){
+            item.status = '运行中'
+        }else if(item.status === 2){
+            item.status = '事故'
+        }
+    })
 
     pageInfo.curr=carData.carData.values.data.current
     pageInfo.size=carData.carData.values.data.size
