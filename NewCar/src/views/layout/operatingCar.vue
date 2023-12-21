@@ -1,40 +1,43 @@
 <template>
     <div class="userList">
         <div class="top">
-
+            <div class="selector">
+                <!-- Add your selector content here -->
+            </div>
+            <div class="search">
+                <!-- Add your search content here -->
+            </div>
         </div>
         <div class="line"></div>
         <div class="container">
             <el-card class="box-card" v-for="item in carInfo" :key="item" @click="showData(item)">
-                <img :src=item.avatar alt="">
+                <img :src="item.avatar" alt="">
                 <div class="text">
                     <span>{{ item.carPlate }}</span>
-                    <span v-if=item.isRenewable>新能源</span>
+                    <span v-if="item.isRenewable">新能源</span>
                 </div>
             </el-card>
         </div>
         <div class="line"></div>
         <div class="foot">
             <el-pagination background layout="prev, pager, next" @click="clickEvent" v-model:current-page="pageInfo.curr"
-                :total=pageInfo.total :page-size=pageInfo.size class="m-2" />
+                :total="pageInfo.total" :page-size="pageInfo.size" class="m-2" />
         </div>
     </div>
 
     <el-dialog v-model="dialogVisible" title="车辆信息" width="30%">
         <div class="contain">
             <el-card :body-style="{ padding: '0px' }">
-                <img :src="dialogData.avatar"
-                    class="image" />
+                <img :src="dialogData.avatar" class="image" />
                 <div style="padding: 14px" class="car">
                     <div class="left">
-
                         <span>车牌号 : {{ dialogData.carPlate }}</span>
                         <span>车辆高度 : {{ dialogData.carHeight }}</span>
                         <span>车辆长度 : {{ dialogData.carLength }}</span>
                     </div>
                     <div class="right">
                         <span>颜色 : {{ dialogData.color }}</span>
-                        <span v-if=dialogData.isRenewable>新能源</span>
+                        <span v-if="dialogData.isRenewable">新能源</span>
                     </div>
                 </div>
             </el-card>
@@ -42,21 +45,17 @@
         <template #footer>
             <span class="dialog-footer">
                 <el-button @click="dialogVisible = false">取消</el-button>
-                <el-button type="primary" @click="dialogVisible = false">
-                    确认
-                </el-button>
+                <el-button type="primary" @click="dialogVisible = false">确认</el-button>
             </span>
         </template>
     </el-dialog>
 </template>
 
-<script setup lang='ts'>
-import SearchBar from './components/searchBar.vue';
+<script setup lang="ts">
 import { ref, watch, onMounted, reactive } from 'vue'
 import { anim } from '../../stores/modules/animator';
 import { useCarStore } from '../../stores/modules/car'
 
-const value1 = ref('')
 const animator = anim()
 const carStore = useCarStore()
 
@@ -66,53 +65,32 @@ const pageInfo = reactive({
     size: 8
 })
 
-const carInfo = reactive([
-
-])
+const carInfo = reactive([])
 
 onMounted(async () => {
     const userList = document.querySelector('.userList')
-    if (animator.animations.isCollapse) {
-        userList.classList.remove('hide')
-    } else {
-        userList.classList.add('hide')
-    }
-    //获取车辆信息
-    await carStore.getAllCar({ page: pageInfo.curr, pageSize: pageInfo.size })
-    const res = carStore.carInfo.records
-    //res赋值给carInfo
-    carInfo.push(
-        ...res
-    )
-    console.log(carInfo);
+    userList.classList.toggle('hide', !animator.animations.isCollapse)
 
-    //获取页面信息
+    // 获取车辆信息
+    await carStore.getAllCar({ page: pageInfo.curr, pageSize: pageInfo.size })
+    carInfo.push(...carStore.carInfo.records)
+
+    // 获取页面信息
     pageInfo.curr = carStore.carInfo.current
     pageInfo.total = carStore.carInfo.total
     pageInfo.size = carStore.carInfo.size
 })
 
-watch(() => animator.animations.isCollapse,
-    //如果为true，则为platoonInfo移除hide类，否则添加hide类
-    () => {
-        const userList = document.querySelector('.userList')
-        if (animator.animations.isCollapse) {
-            userList.classList.remove('hide')
-        } else {
-            userList.classList.add('hide')
-        }
-    }
-)
+watch(() => animator.animations.isCollapse, () => {
+    const userList = document.querySelector('.userList')
+    userList.classList.toggle('hide', !animator.animations.isCollapse)
+})
 
 const search = async () => {
     await carStore.getAllCar(searchData.value)
 
-    const res = carStore.carInfo.records
-    //res赋值给carInfo
     carInfo.splice(0, carInfo.length)
-    carInfo.push(
-        ...res
-    )
+    carInfo.push(...carStore.carInfo.records)
 }
 
 type SearchData = {
@@ -128,21 +106,19 @@ const searchData = ref<SearchData>({
 const clickEvent = () => {
     searchData.value.page = pageInfo.curr
     searchData.value.pageSize = pageInfo.size
-    //调用getVal函数，重新获取数据
     search()
 }
 
 const dialogVisible = ref(false)
-
 const dialogData = ref()
 
 const showData = (value: any) => {
     dialogVisible.value = true
     dialogData.value = value
-    console.log(dialogData.value.avatar);
 }
 
 </script>
+
 <style scoped>
 .userList {
     width: 91%;
@@ -150,7 +126,7 @@ const showData = (value: any) => {
     display: flex;
     flex-direction: column;
     background-color: #fff;
-    margin: 15px 15px 15px 15px;
+    margin: 15px;
     box-shadow: 0 0 10px #ddd;
     border-radius: 5px;
 
@@ -165,9 +141,8 @@ const showData = (value: any) => {
             width: 50%;
             height: 100%;
             display: flex;
-            justify-content: end;
+            justify-content: flex-end;
             align-items: center;
-
         }
 
         .search {
@@ -196,7 +171,7 @@ const showData = (value: any) => {
             align-items: center;
             box-shadow: 0 0 10px #ddd;
             border-radius: 5px;
-            margin: 15px 15px 15px 15px;
+            margin: 15px;
             position: relative;
             left: 80px;
             cursor: pointer;
@@ -233,7 +208,6 @@ const showData = (value: any) => {
                     line-height: 25px;
                 }
             }
-
         }
 
         .box-card:hover {
@@ -252,7 +226,7 @@ const showData = (value: any) => {
         width: 100%;
         height: 10%;
         display: flex;
-        justify-content: end;
+        justify-content: flex-end;
         align-items: center;
         margin-bottom: 20px;
         position: relative;
@@ -262,42 +236,41 @@ const showData = (value: any) => {
 
 .hide {
     width: 83%;
-
     transition: all 0.5s;
 }
 
 .bottom {
-  margin-top: 13px;
-  line-height: 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+    margin-top: 13px;
+    line-height: 12px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
 }
 
 .button {
-  padding: 0;
-  min-height: auto;
+    padding: 0;
+    min-height: auto;
 }
 
 .image {
-  width: 100%;
-  display: block;
+    width: 100%;
+    display: block;
 }
 
-.car{
+.car {
     display: flex;
     justify-content: space-between;
     align-items: start;
     margin-top: 10px;
 
-    .left{
+    .left {
         display: flex;
         flex-direction: column;
         justify-content: start;
         align-items: start;
         margin-left: 10px;
 
-        span{
+        span {
             font-size: 14px;
             font-weight: 500;
             color: #333;
@@ -305,21 +278,21 @@ const showData = (value: any) => {
         }
     }
 
-    .right{
+    .right {
         display: flex;
         flex-direction: column;
         justify-content: start;
         align-items: start;
         margin-right: 10px;
 
-        span{
+        span {
             font-size: 14px;
             font-weight: 500;
             color: #333;
             margin-bottom: 10px;
         }
 
-        span:nth-child(2){
+        span:nth-child(2) {
             width: 50px;
             height: 25px;
             font-size: 14px;
