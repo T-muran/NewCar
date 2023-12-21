@@ -7,10 +7,11 @@ export const getMapPoint = () => {
     });
 }
 
-export const getMemberPoint = () => {
+export const getMemberPoint = (params?:any) => {
     return request({
         url: "/getPointInPlatoon",
         method: "get",
+        params
     });
 }
 

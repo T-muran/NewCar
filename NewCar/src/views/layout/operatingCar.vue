@@ -5,7 +5,7 @@
         </div>
         <div class="line"></div>
         <div class="container">
-            <el-card class="box-card" v-for="item in carInfo" :key="item">
+            <el-card class="box-card" v-for="item in carInfo" :key="item" @click="showData(item)">
                 <img :src=item.avatar alt="">
                 <div class="text">
                     <span>{{ item.carPlate }}</span>
@@ -15,10 +15,39 @@
         </div>
         <div class="line"></div>
         <div class="foot">
-            <el-pagination background layout="prev, pager, next" @click="clickEvent" v-model:current-page="pageInfo.curr" :total=pageInfo.total :page-size=pageInfo.size
-                class="m-2" />
+            <el-pagination background layout="prev, pager, next" @click="clickEvent" v-model:current-page="pageInfo.curr"
+                :total=pageInfo.total :page-size=pageInfo.size class="m-2" />
         </div>
     </div>
+
+    <el-dialog v-model="dialogVisible" title="车辆信息" width="30%">
+        <div class="contain">
+            <el-card :body-style="{ padding: '0px' }">
+                <img :src="dialogData.avatar"
+                    class="image" />
+                <div style="padding: 14px" class="car">
+                    <div class="left">
+
+                        <span>车牌号 : {{ dialogData.carPlate }}</span>
+                        <span>车辆高度 : {{ dialogData.carHeight }}</span>
+                        <span>车辆长度 : {{ dialogData.carLength }}</span>
+                    </div>
+                    <div class="right">
+                        <span>颜色 : {{ dialogData.color }}</span>
+                        <span v-if=dialogData.isRenewable>新能源</span>
+                    </div>
+                </div>
+            </el-card>
+        </div>
+        <template #footer>
+            <span class="dialog-footer">
+                <el-button @click="dialogVisible = false">取消</el-button>
+                <el-button type="primary" @click="dialogVisible = false">
+                    确认
+                </el-button>
+            </span>
+        </template>
+    </el-dialog>
 </template>
 
 <script setup lang='ts'>
@@ -75,7 +104,7 @@ watch(() => animator.animations.isCollapse,
     }
 )
 
-const search = async() => {
+const search = async () => {
     await carStore.getAllCar(searchData.value)
 
     const res = carStore.carInfo.records
@@ -86,14 +115,14 @@ const search = async() => {
     )
 }
 
-type SearchData={
-    page:number
-    pageSize:number
+type SearchData = {
+    page: number
+    pageSize: number
 }
 
 const searchData = ref<SearchData>({
-    page:1,
-    pageSize:8,
+    page: 1,
+    pageSize: 8,
 })
 
 const clickEvent = () => {
@@ -101,6 +130,16 @@ const clickEvent = () => {
     searchData.value.pageSize = pageInfo.size
     //调用getVal函数，重新获取数据
     search()
+}
+
+const dialogVisible = ref(false)
+
+const dialogData = ref()
+
+const showData = (value: any) => {
+    dialogVisible.value = true
+    dialogData.value = value
+    console.log(dialogData.value.avatar);
 }
 
 </script>
@@ -148,7 +187,7 @@ const clickEvent = () => {
         align-items: start;
         flex-wrap: wrap;
 
-        .box-card{
+        .box-card {
             width: 20%;
             height: 45%;
             display: flex;
@@ -160,15 +199,16 @@ const clickEvent = () => {
             margin: 15px 15px 15px 15px;
             position: relative;
             left: 80px;
+            cursor: pointer;
 
-            img{
+            img {
                 width: 150px;
                 height: 150px;
                 border-radius: 5px 5px 0 0;
                 object-fit: cover;
             }
 
-            .text{
+            .text {
                 width: 100%;
                 height: 50px;
                 display: flex;
@@ -180,7 +220,7 @@ const clickEvent = () => {
                     font-weight: 700;
                     color: #333;
                 }
-    
+
                 span:nth-child(2) {
                     width: 50px;
                     height: 25px;
@@ -196,7 +236,7 @@ const clickEvent = () => {
 
         }
 
-        .box-card:hover{
+        .box-card:hover {
             box-shadow: 0 0 10px #ddd;
             scale: 1.1;
         }
@@ -224,5 +264,72 @@ const clickEvent = () => {
     width: 83%;
 
     transition: all 0.5s;
+}
+
+.bottom {
+  margin-top: 13px;
+  line-height: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.button {
+  padding: 0;
+  min-height: auto;
+}
+
+.image {
+  width: 100%;
+  display: block;
+}
+
+.car{
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-top: 10px;
+
+    .left{
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: start;
+        margin-left: 10px;
+
+        span{
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 10px;
+        }
+    }
+
+    .right{
+        display: flex;
+        flex-direction: column;
+        justify-content: start;
+        align-items: start;
+        margin-right: 10px;
+
+        span{
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        span:nth-child(2){
+            width: 50px;
+            height: 25px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #e9f1ea;
+            background-color: rgb(66, 220, 125);
+            border-radius: 10px;
+            text-align: center;
+            line-height: 25px;
+        }
+    }
 }
 </style>

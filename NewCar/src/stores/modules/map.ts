@@ -28,8 +28,8 @@ export const mapDatas = defineStore('map',()=>{
     }
 
     //获取成员点位信息
-    const getMemberData = async() => {
-        const res = await getMemberPoint()
+    const getMemberData = async(data?:any) => {
+        const res = await getMemberPoint(data)
         if(res){
             mapData.value = res.data
         }
@@ -46,7 +46,7 @@ export const mapDatas = defineStore('map',()=>{
 
 export const windowInfo = defineStore('windowInfo',()=>{
     const windowInfo = ref({
-        count:0,
+        isClick:false,
     })
 
     return {

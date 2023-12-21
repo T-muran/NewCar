@@ -3,18 +3,23 @@
 </template>
 
 <script setup lang="ts">
-import { reactive, getCurrentInstance, onMounted, onUnmounted, ref } from "vue";
+import { reactive, getCurrentInstance, onMounted, onUnmounted, ref, watch } from "vue";
 import AMapLoader from "@amap/amap-jsapi-loader";
-import { mapDatas } from "../stores/modules/map";
+import { mapDatas,windowInfo } from "../stores/modules/map";
 import car from "../assets/car.png";
-import { createWindow,unmount } from "../utils/creareInfoWindow";
+import { createWindow, unmount } from "../utils/creareInfoWindow";
 
 const lng = ref(104.04311);
 const lat = ref(30.64242);
 const mapdata = mapDatas();
+const windowInfoData = windowInfo();
 
 let MarkerCluster;
 let map;
+let geocoder
+let infoWindow
+let markers
+let content
 
 const instance = getCurrentInstance();
 
@@ -35,7 +40,7 @@ window._AMapSecurityConfig = {
     securityJsCode: '0a6e937f4eb30bef45ed112b4a86b201'
 }
 
-//地图创建
+//#region 地图创建
 onMounted(() => {
     if (navigator.geolocation) {
         // 支持获取当前位置信息的浏览器
@@ -67,8 +72,7 @@ onMounted(() => {
             zoom: 8, // 初始化地图级别
             center: [lng.value, lat.value], // 初始化地图中心点位置
         });
-        let geocoder
-        let infoWindow
+
         //地图中添加地图操作ToolBar插件
         map.plugin(["AMap.ToolBar", "AMap.MapType", "AMap.Geocoder"], () => {
             map.addControl(new AMap.ToolBar());
@@ -88,18 +92,18 @@ onMounted(() => {
             maxZoom: 14,
             renderMarker(context) {
                 const { marker, data } = context;
-
+                markers = marker;
                 if (Array.isArray(data) && data[0]) {
-                    const content = `<img src="${car}" />`;
-                    marker.setContent(content);
-                    marker.setLabel({
+                    content = `<img src="${car}" />`;
+                    markers.setContent(content);
+                    markers.setLabel({
                         direction: "bottom",
                         //设置文本标注偏移量
                         offset: new AMap.Pixel(-4, 0),
                         //设置文本标注内容
                     });
-                    marker.setOffset(new AMap.Pixel(-18, -10));
-                    marker.on("click", ({ lnglat }) => {
+                    markers.setOffset(new AMap.Pixel(-18, -10));
+                    markers.on("click", ({ lnglat }) => {
                         map.setZoom(17); //设置地图层级
                         map.setCenter(lnglat);
                         const userId = {
@@ -107,9 +111,10 @@ onMounted(() => {
                         }
                         mapdata.getPlatoonData(userId).then();
                         console.log(lnglat);
-                        
+
                         //逆地理编码
                         geocoder.getAddress(lnglat, (status, result) => {
+                            console.log(lnglat);
                             if (status === "complete" && result.info === "OK") {
                                 // result为对应的地理位置详细信息
                                 const address = result.regeocode.formattedAddress;
@@ -133,7 +138,7 @@ onMounted(() => {
             },
         });
         map.on('click', () => {
-            if(infoWindow) {
+            if (infoWindow) {
                 infoWindow.close();
                 unmount()
             }
@@ -173,6 +178,43 @@ onMounted(() => {
     });
 });
 
+//#endregion
+
+//#region 
+watch(() => windowInfoData.windowInfo.isClick, (newValue) => {
+    if (newValue) {
+        if (infoWindow) {
+            infoWindow.close();
+            unmount();
+        }
+        windowInfoData.windowInfo.isClick = false;
+        
+        const platoonId = {
+            platoonId: mapdata.mapData.data.platoonId
+        }
+        mapdata.getMemberData(platoonId).then(({ data } = mapdata.mapData) => {
+            const points: object = data.map(v => {
+                return {
+                    lnglat: [v.curLongitude, v.curLatitude],
+                    ...v
+                }
+            })
+            if (MarkerCluster) MarkerCluster.setData(points);
+            console.log(points);
+            
+        });
+        // map.remove(markers)
+    }
+});
+//点击车队成员，显示信息
+watch(() => mapdata.mapData.data, (newValue) => {
+    console.log(newValue);
+    
+});
+
+//#endregion
+
+//地图销毁
 onUnmounted(() => {
     if (map) {
         map.destroy();

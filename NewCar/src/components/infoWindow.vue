@@ -73,10 +73,10 @@
 <script setup lang='ts'>
 import { onMounted, ref, toRef, watch, toRefs, reactive } from 'vue';
 import { Close } from '@element-plus/icons-vue'
-import { mapDatas } from '../stores/modules/map'
-
+import { mapDatas,windowInfo } from '../stores/modules/map'
 
 const mapDataInfo = mapDatas();
+const windowInfoData = windowInfo()
 
 const props = defineProps({
     closeApp: {
@@ -108,8 +108,16 @@ const close = () => {
 
 //修改时间格式函数
 const changeTime = (time) => {
+    if(!time) return
+    //如果有T，说明是2021-08-09T12:00:00格式
     //修改时间格式 2021-08-09T12:00:00 => 08-09-12:00 ,需要去掉T和秒
-    return time.replace('T', ' ').slice(5, -3)
+    if (time.includes('T')) {
+        return time.replace('T', ' ').slice(5, -3)
+    } else {
+        //如果没有T，说明是2021-08-09 12:00:00格式
+        //修改时间格式 2021-08-09 12:00:00 => 08-09 12:00
+        return time.slice(5, -3)
+    }
 }
 
 //监视mapDataInfo.mapData的变化
@@ -123,7 +131,9 @@ watch(toRef(mapDataInfo, 'mapData'), (newVal, oldVal) => {
 })
 
 ///TODO : 返回父组件点击事件
-
+const click = () => {
+    windowInfoData.windowInfo.isClick = true
+}
 
 </script>
 <style lang="less" scoped>
