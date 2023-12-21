@@ -18,6 +18,11 @@ import searchBar from './components/searchBar.vue';
 import stateShow from './components/stateShow.vue';
 import { onBeforeMount, ref,onMounted } from 'vue';
 import { carDatas } from '../../stores/modules/platoonInfo';
+import { getInfo } from '../../api/user';
+import { setUser } from '../../utils/auth';
+import { useUserStore } from '../../stores/modules/user';
+
+const userStore = useUserStore()
 
 
 const carData = carDatas();
@@ -38,6 +43,14 @@ onMounted(async () => {
     }catch(err){
         console.log(err);
     }
+
+    getInfo().then(res => {
+        userStore.userInfo.carTotal = res.data.data.carTotal
+        userStore.userInfo.platoonTotal = res.data.data.platoonTotal
+        userStore.userInfo.runningCarTotal = res.data.data.runningCarTotal
+        userStore.userInfo.userTotal = res.data.data.userTotal
+        setUser(userStore.userInfo)
+    })
 });
 
 

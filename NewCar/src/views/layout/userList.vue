@@ -67,12 +67,17 @@ watch(() => animator.animations.isCollapse,
 )
 
 const handleClick = (row) => {
-    if(row.status === 1) {
-        row.status = 0
-    } else {
-        row.status = 1
-    }
-    changeState({ id: row.id, status: row.status ,who: 0})
+    changeState({ id: row.id, status: row.status, who: 0 }).then(res => {
+        console.log(res)
+        if (res.data.code === 1) {
+            if (row.status === 1) {
+                row.status = 0
+            } else {
+                row.status = 1
+            }
+        }
+    })
+
 }
 
 const tableData = reactive([])

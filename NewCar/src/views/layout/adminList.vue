@@ -72,8 +72,12 @@ watch(
 const dialogVisible = ref(false);
 
 const handleClick = (row) => {
-    row.status = row.status === 1 ? 0 : 1;
-    changeState({ id: row.id, status: row.status, who: 1 });
+    changeState({ id: row.id, status: row.status, who: 1 }).then((res) => {
+        if (res.data.code === 1) {
+            
+            row.status = row.status === 1 ? 0 : 1;
+        }
+    });
 };
 
 const tableData = reactive([]);
