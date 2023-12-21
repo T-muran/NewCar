@@ -9,8 +9,8 @@ import { mapDatas,windowInfo } from "../stores/modules/map";
 import car from "../assets/car.png";
 import { createWindow, unmount } from "../utils/creareInfoWindow";
 
-const lng = ref(104.04311);
-const lat = ref(30.64242);
+const lng = ref(113.415096);
+const lat = ref(23.016926);
 const mapdata = mapDatas();
 const windowInfoData = windowInfo();
 

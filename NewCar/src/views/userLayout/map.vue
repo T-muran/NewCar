@@ -115,8 +115,8 @@ window._AMapSecurityConfig = {
 
 let map;
 const userStore = useUserStore()
-const lng = ref(104.04311);
-const lat = ref(30.64242);
+const lng = ref(113.415096);
+const lat = ref(23.016926);
 const userCarStore = useUserCarStore()
 
 const mapSet = reactive({

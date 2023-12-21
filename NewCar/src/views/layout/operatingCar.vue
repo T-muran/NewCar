@@ -32,8 +32,8 @@
                 <div style="padding: 14px" class="car">
                     <div class="left">
                         <span>车牌号 : {{ dialogData.carPlate }}</span>
-                        <span>车辆高度 : {{ dialogData.carHeight }}</span>
-                        <span>车辆长度 : {{ dialogData.carLength }}</span>
+                        <span>车辆高度 : {{ dialogData.carHeight }} 米</span>
+                        <span>车辆长度 : {{ dialogData.carLength }} 米</span>
                     </div>
                     <div class="right">
                         <span>颜色 : {{ dialogData.color }}</span>
