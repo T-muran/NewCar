@@ -1,7 +1,6 @@
 <template>
     <div class="main">
         <div class="center">
-            <searchBar info="搜索车队领队"  class="bar" />
             <stateShow />
             <MiniMap />
         </div>
