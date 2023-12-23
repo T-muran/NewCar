@@ -60,7 +60,7 @@ const data = reactive([{
 <style scoped>
 .state {
     width: 100%;
-    height: 125px;
+    height: 17.5%;
     background-color: #fff;
     margin-top: 20px;
     border-radius: 5px;
