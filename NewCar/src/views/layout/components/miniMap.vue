@@ -12,9 +12,9 @@ import reMap from '../../../components/reMap.vue';
 <style scoped>
 .miniMap {
     width: 100%;
-    height: 400px;
+    height: 550px;
     background-color: #fff;
-    margin-top: 60px;
+    margin-top: 30px;
     border-radius: 5px;
     box-shadow: 0 0 10px #ddd;
 }
