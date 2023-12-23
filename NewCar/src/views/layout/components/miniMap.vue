@@ -14,7 +14,7 @@ import reMap from '../../../components/reMap.vue';
     width: 100%;
     height: 400px;
     background-color: #fff;
-    margin-top: 20px;
+    margin-top: 60px;
     border-radius: 5px;
     box-shadow: 0 0 10px #ddd;
 }

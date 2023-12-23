@@ -29,8 +29,8 @@
                 </div>
                 <div class="line"></div>
                 <div class="part2">
-                    <span>车队</span>
-                    <span>{{ mapDataInfo.mapData.data.startPoint }}</span>
+                    <span>车队终点</span>
+                    <span>{{ mapDataInfo.mapData.data.endPoint }}</span>
                 </div>
             </el-card>
         </div>

@@ -63,6 +63,7 @@ type From = {
     userName: string,
     phoneNum: string
     idNumber: string
+    id: string
 }
 
 type Rules = {
@@ -82,6 +83,7 @@ const formData = reactive<From>({
     userName: '',
     phoneNum: '',
     idNumber: '',
+    id: ''
 })
 
 
@@ -90,6 +92,7 @@ onMounted(async () => {
     formData.userName = tableData.userName
     formData.phoneNum = tableData.phoneNum
     formData.idNumber = tableData.idNumber
+    formData.id = tableData.id
 })
 
 const getVal = async () => {
@@ -113,7 +116,7 @@ const isChange = ref(false)
 const onSubmit = () => {
     form.value?.validate((valid: boolean) => {
         if (valid) {
-            changeEmployee(tableData).then(res => {
+            changeEmployee(formData).then(res => {
                 console.log(res);
                 if (res.data.code === 1) {
                     getVal()

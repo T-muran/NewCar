@@ -71,6 +71,7 @@ onMounted(async () => {
         box-sizing: border-box;
         display: flex;
         flex-direction: column;
+        margin-top: 40px;
 
         .bar{
             margin-top: 20px;

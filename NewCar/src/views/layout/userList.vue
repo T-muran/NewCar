@@ -67,7 +67,9 @@ watch(() => animator.animations.isCollapse,
 )
 
 const handleClick = (row) => {
-    changeState({ id: row.id, status: row.status, who: 0 }).then(res => {
+    let status = row.status
+    status === 1 ? status = 0 : status = 1
+    changeState({ id: row.id, status: status, who: 0 }).then(res => {
         console.log(res)
         if (res.data.code === 1) {
             if (row.status === 1) {

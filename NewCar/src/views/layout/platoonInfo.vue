@@ -20,7 +20,7 @@
                 <el-table-column prop="platoonSpacing" label="车队间距" min-width="120" />
                 <el-table-column prop="platoonSpeed" label="车队配速" min-width="120" />
                 <el-table-column prop="startPoint" label="车队起点" min-width="270" />
-                <el-table-column prop="startPoint" label="车队终点" min-width="270" />
+                <el-table-column prop="endPoint" label="车队终点" min-width="270" />
                 <!-- <el-table-column fixed="right" label="操作" min-width="120">
                     <template #default>
                         <el-button link type="primary" size="small"  @click="handleClick">查看信息</el-button>
@@ -79,10 +79,6 @@ const options1 = [
         label: '运行中',
     },
     {
-        value: 2,
-        label: '事故',
-    },
-    {
         value: 3,
         label: '全部',
     },
@@ -124,8 +120,6 @@ const getVal = async () => {
             item.status = '已结束'
         }else if(item.status === 1){
             item.status = '运行中'
-        }else if(item.status === 2){
-            item.status = '事故'
         }
     })
 
@@ -153,6 +147,14 @@ const search = async() =>{
     toRaw(tableData).forEach((item:any) => {
         item.createTime = formatTime(item.createTime)
         item.endTime = formatTime(item.endTime)
+    })
+    //如果tableData.status===0,则改为已结束，如果为1，则改为运行中
+    toRaw(tableData).forEach((item:any) => {
+        if(item.status === 0){
+            item.status = '已结束'
+        }else if(item.status === 1){
+            item.status = '运行中'
+        }
     })
 
     pageInfo.curr=carData.carData.values.data.current
