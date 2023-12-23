@@ -1,6 +1,6 @@
 <template>
     <div class="carInfo">
-        <el-scrollbar height="100%">    
+        <el-scrollbar height="100vh">    
             <el-card class="box-card">
                 <template #header>
                     <div class="card-header">
@@ -279,7 +279,7 @@ const onSubmit2 = () => {
 }
 
 .box-card {
-    height: 98vh;
+    height: 100%;
     width: 100%;
     margin-top: 5px;
     margin-left: 5px;
