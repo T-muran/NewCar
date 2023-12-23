@@ -197,6 +197,11 @@ const refresh = () => {
         })
         if (MarkerCluster) MarkerCluster.setData(points);
     });
+    //如果有信息窗体，则关闭
+    if (infoWindow) {
+        infoWindow.close();
+        unmount()
+    }
 };
 
 //#region 
@@ -258,9 +263,12 @@ onUnmounted(() => {
 
     .el-button {
     position: absolute;
-    top: 10px;
-    left: 10px;
+    top: 30px;
+    left: 30px;
     z-index: 999;
+    height: 50px;
+    width: 110px;
+    font-size: 20px;
 }
 }
 
