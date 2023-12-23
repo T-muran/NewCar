@@ -93,7 +93,7 @@
                 </el-form>
                 <template #footer>
                     <span class="dialog-footer">
-                        <el-button @click="addCarFormVisible = false">取消</el-button>
+                        <el-button @click="updateCarFormVisible = false">取消</el-button>
                         <el-button type="primary" @click="onSubmit2">
                             确定
                         </el-button>
