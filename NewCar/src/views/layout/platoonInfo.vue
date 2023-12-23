@@ -109,6 +109,7 @@ const getVal = async () => {
     //tableData第一个元素为{}，所以需要先删除
     tableData.splice(0,1)
     toRaw(tableData).push(...res)
+    
     //对时间进行格式化
     toRaw(tableData).forEach((item:any) => {
         item.createTime = formatTime(item.createTime)
@@ -130,6 +131,9 @@ const getVal = async () => {
 
 //对时间进行格式化 2023-01-05T01:15:27 => 2023-01-05 01:15:27
 const formatTime = (time:string) => {
+    if(time === null){
+        return '---'
+    }
     const arr = time.split('T')
     const arr1 = arr[1].split('.')
     return arr[0] + ' ' + arr1[0]
