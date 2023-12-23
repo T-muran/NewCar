@@ -1,5 +1,7 @@
 <template>
-    <div id="mapview" ref="mapview" v-loading="mapSet.loading" />
+    <div id="mapview" ref="mapview" v-loading="mapSet.loading" >
+        <el-button @click="refresh" type="primary">刷新</el-button>
+    </div>
 </template>
 
 <script setup lang="ts">
@@ -86,7 +88,15 @@ onMounted(() => {
             geocoder = new AMap.Geocoder();
         });
 
-        MarkerCluster = new AMap.MarkerCluster(map, [], {
+        drawMarkerCluster();
+        complete();
+    });
+});
+
+//#endregion 
+
+const drawMarkerCluster = () => {
+    MarkerCluster = new AMap.MarkerCluster(map, [], {
             // 聚合网格像素大小
             gridSize: 80,
             maxZoom: 14,
@@ -174,11 +184,20 @@ onMounted(() => {
             })
             if (MarkerCluster) MarkerCluster.setData(points);
         });
-        complete();
-    });
-});
+};
 
-//#endregion
+//刷新地图
+const refresh = () => {
+    mapdata.getMapData().then(({ data } = mapdata.mapData) => {
+        const points: object = data.map(v => {
+            return {
+                lnglat: [v.curLongitude, v.curLatitude],
+                ...v
+            }
+        })
+        if (MarkerCluster) MarkerCluster.setData(points);
+    });
+};
 
 //#region 
 watch(() => windowInfoData.windowInfo.isClick, (newValue) => {
@@ -236,5 +255,14 @@ onUnmounted(() => {
     height: 100%;
     border-radius: 5px;
     box-shadow: 0 0 10px #ddd;
+
+    .el-button {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    z-index: 999;
 }
+}
+
+
 </style>   
