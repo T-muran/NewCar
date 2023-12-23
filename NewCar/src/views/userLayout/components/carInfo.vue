@@ -1,29 +1,35 @@
 <template>
     <div class="carInfo">
-        <el-card class="box-card">
-            <template #header>
-                <div class="card-header">
-                    <span>车辆信息</span>
-                    <el-button class="button" text @click="addCarFormVisible = true">添加车辆</el-button>
-                </div>
-            </template>
-            <div class="container">
-                <el-card class="box-card2" v-for="item in carInfo" :key="item">
-                    <img :src=item.avatar alt="">
-                    <el-icon class="close" @click="showDelete(item)"><Close /></el-icon>
-                    <el-icon class="edit" @click="updatedCars(item)"><Edit /></el-icon>
-                    <div class="text">
-                        <span>{{ item.carPlate }}</span>
-                        <span v-if=item.isRenewable>新能源</span>
-                        <div class="info">
-                            <span>高度：{{ item.carHeight }}米 &nbsp</span>
-                            <span>长度：{{ item.carLength }}米 &nbsp</span>
-                            <span>颜色：{{ item.color }} &nbsp</span>
-                        </div>
+        <el-scrollbar height="100%">    
+            <el-card class="box-card">
+                <template #header>
+                    <div class="card-header">
+                        <span>车辆信息</span>
+                        <el-button class="button" text @click="addCarFormVisible = true">添加车辆</el-button>
                     </div>
-                </el-card>
-            </div>
-        </el-card>
+                </template>
+                <div class="container">
+                    <el-card class="box-card2" v-for="item in carInfo" :key="item">
+                        <img :src=item.avatar alt="">
+                        <el-icon class="close" @click="showDelete(item)">
+                            <Close />
+                        </el-icon>
+                        <el-icon class="edit" @click="updatedCars(item)">
+                            <Edit />
+                        </el-icon>
+                        <div class="text">
+                            <span>{{ item.carPlate }}</span>
+                            <span v-if=item.isRenewable>新能源</span>
+                            <div class="info">
+                                <span>高度：{{ item.carHeight }}米 &nbsp</span>
+                                <span>长度：{{ item.carLength }}米 &nbsp</span>
+                                <span>颜色：{{ item.color }} &nbsp</span>
+                            </div>
+                        </div>
+                    </el-card>
+                </div>
+            </el-card>
+        </el-scrollbar>
         <div class="dialog1">
             <el-dialog width="40%" v-model="addCarFormVisible" title="添加车辆">
                 <el-form class="form1" :model="formData1" ref="form1" :rules="rules1">
@@ -107,12 +113,11 @@
 <script setup lang='ts'>
 import { watch, onMounted, ref, reactive } from 'vue';
 import { anim } from '../../../stores/modules/animator';
-import { addCar,deleteCar,updatedUserCar } from '../../../api/user'
-import {useUserCarStore} from '../../../stores/modules/car'
+import { addCar, deleteCar, updatedUserCar } from '../../../api/user'
+import { useUserCarStore } from '../../../stores/modules/car'
 import { useUserStore } from '../../../stores/modules/user'
 import { ElMessage } from 'element-plus'
-import { Close,Edit } from '@element-plus/icons-vue'
-import { de } from 'element-plus/es/locale/index.mjs';
+import { Close, Edit } from '@element-plus/icons-vue'
 
 const animator = anim();
 const userStore = useUserStore()
@@ -182,7 +187,7 @@ const rules1 = reactive<AddRules>({
     isRenewable: [{ required: true, message: '请选择是否为新能源', trigger: 'blur' }]
 })
 
-const addCars =async () => {
+const addCars = async () => {
     const data = {
         userId: userStore.getUserInfo().id,
         carPlate: formData1.carPlate,
@@ -216,12 +221,12 @@ const deleteForm = {
     id: ''
 }
 
-const showDelete = (value:any) => {
+const showDelete = (value: any) => {
     deleteVisible.value = true
     deleteForm.id = value.id
 }
 
-const deleteCars =async (value) => {
+const deleteCars = async (value) => {
     await deleteCar(deleteForm)
     deleteVisible.value = false
     getCarInfo()
@@ -233,7 +238,7 @@ const updateCarFormVisible = ref(false)
 
 const carId = ref(0)
 
-const updatedCars =async (value) => {
+const updatedCars = async (value) => {
     updateCarFormVisible.value = true
     formData1.carPlate = value.carPlate
     formData1.carLength = value.carLength
@@ -362,7 +367,7 @@ const onSubmit2 = () => {
 
             .edit:hover {
                 scale: 1.2;
-                color:#409eff;
+                color: #409eff;
             }
 
             .text {
@@ -424,5 +429,16 @@ const onSubmit2 = () => {
 
 .dialog-footer button:first-child {
     margin-right: 10px;
+}
+.scrollbar-demo-item {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 50px;
+  margin: 10px;
+  text-align: center;
+  border-radius: 4px;
+  background: var(--el-color-primary-light-9);
+  color: var(--el-color-primary);
 }
 </style>
