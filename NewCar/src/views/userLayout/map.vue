@@ -328,6 +328,9 @@ const quit = async () => {
         getPlatoonData()
         inPlatoon.value = false
     }
+
+    //刷新页面
+    window.location.reload()
 }
 
 //#endregion
