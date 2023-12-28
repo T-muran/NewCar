@@ -168,6 +168,7 @@ const changeEvent = (addrNode: string) => {
 const changeState = () => {
     console.log(formData);
     formData.address += address.value
+    address.value = ''  //清空地址
     updateUserInfo(formData).then(res => {
         if (res.data.code === 0) {
             return
